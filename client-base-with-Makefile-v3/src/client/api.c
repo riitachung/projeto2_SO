@@ -46,11 +46,11 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
   if((notif_fd = open(notif_pipe_path, O_RDONLY)) < 0) exit (1);        // debloqueia fifo de notificações do servidor
   
   /*---------- LÊ RESPOSTA DO SERVER ----------*/  
-  if(read(notif_fd, &opcode_notif, 1) <= 0 || (opcode_notif != 1)) exit(1);                         
-  if(read(notif_fd, &result, 1) <= 0) exit(1);
+  if(read(notif_fd, &opcode_notif, sizeof(char)) <= 0 || (opcode_notif != 1)) exit(1);                         
+  if(read(notif_fd, &result, sizeof(char)) <= 0) exit(1);
   if(result != 0) {
     fprintf(stderr, "Servidor não aceitou a conexão\n");                // resultado tem de ser 0 e opcode retornado tem de ser 1
-    return -1;
+    return 1;
   }
 
   /*----------- ABRIR FIFO PEDIDOS ------------*/
@@ -79,18 +79,20 @@ int pacman_disconnect() {
   char opcode_disconnect = 2;
   if(session.req_pipe < 0) return -1;
   if(write(session.req_pipe, &opcode_disconnect, sizeof(char)) != 1) return -1; 
+
   /*------ FECHA OS PIPES DA SESSÃO ------*/
   close(session.req_pipe);
   close(session.notif_pipe);
+
   /*----- REMOVE OS PIPES DA SESSÃO -----*/
   unlink(session.req_pipe_path);
   unlink(session.notif_pipe_path);
+  
   /*----- REEINICIAR A SESSÃO -----*/
   session.req_pipe = -1;
   session.notif_pipe = -1;
   strcpy(session.req_pipe_path, "");
   strcpy(session.notif_pipe_path, "");
-
 
   return 0;
 }
