@@ -55,43 +55,27 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    server_fd = open(server_pipe_path, O_RDONLY);
    if(server_fd < 0) return -1;
 
-   printf("criei fifo\n");
-   while(1){
-      char opcode, req_pipe_path[40], notif_pipe_path[40], opcode_result = 1, result = 0;
-      printf("entrei while antes\n");
-      int r = read(server_fd, &opcode, sizeof(char));
-      printf("SERVER FIFO PATH = %s\n", server_pipe_path);
+   char opcode, req_pipe_path[40], notif_pipe_path[40], opcode_result = 1, result = 0;
+   read(server_fd, &opcode, sizeof(char));               // lê opcode enviado pelo client
 
-      printf("read devolveu: %d\n", r);
-      if(r <= 0)continue;
-      printf("entrei while depois\n");
-      printf("%d\n", opcode);
-      if(opcode == 1){
-         
-         if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) continue;
-         if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40) continue;
-         req_pipe_path[39] = '\0';
-         notif_pipe_path[39] = '\0';
-         printf("antes open\n");
-         printf("req_pipe_path = [%s]\n", req_pipe_path);
-         printf("notif_pipe_path = [%s]\n", notif_pipe_path);
+   if(opcode == 1){                                      // se for pedido de inicio de sessao
+      
+      if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40);
+      if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40);
+      
+      req_pipe_path[39] = '\0';
+      notif_pipe_path[39] = '\0';
 
-         notif_fd = open(notif_pipe_path, O_WRONLY);
-         if(notif_fd < 0) continue;
-         printf("apois notificacoes open\n");
-         printf("apos open\n");
-
-
-         printf("antes do conectei\n");
-         // se o read passou responde ao cliente, opcode = 1, result = 0
-         write(notif_fd, &opcode_result, sizeof(char));
-         write(notif_fd, &result, sizeof(char));
-         request_fd = open(req_pipe_path, O_RDONLY);
-         if(request_fd < 0) {
-            close(notif_fd);
-            continue;
-         }
-         printf("CONECTOU CARALHOOOO\n");
+      notif_fd = open(notif_pipe_path, O_WRONLY);
+   
+      // se o read passou responde ao cliente, opcode = 1, result = 0
+      write(notif_fd, &opcode_result, sizeof(char));
+      write(notif_fd, &result, sizeof(char));
+      request_fd = open(req_pipe_path, O_RDONLY);
+      if(request_fd < 0) {
+         close(notif_fd);
       }
+   
    }
+   return 0;
 }

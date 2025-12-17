@@ -61,9 +61,9 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
   session.notif_pipe = notif_fd;
   strncpy(session.req_pipe_path, req_pipe_path, MAX_PIPE_PATH_LENGTH);
   strncpy(session.notif_pipe_path, notif_pipe_path, MAX_PIPE_PATH_LENGTH);
-  printf("CLIENT connecting to %s\n", server_pipe_path);
 
-  printf("CONECTEI\n");
+  debug("deu certo cliente\n");
+
     return 0;
 }
 
