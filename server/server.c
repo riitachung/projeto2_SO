@@ -59,8 +59,11 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    while(1){
       char opcode, req_pipe_path[40], notif_pipe_path[40], opcode_result = 1, result = 0;
       printf("entrei while antes\n");
-   
-      if(read(server_fd, &opcode, sizeof(char)) <= 0) continue;
+      int r = read(server_fd, &opcode, sizeof(char));
+      printf("SERVER FIFO PATH = %s\n", server_pipe_path);
+
+      printf("read devolveu: %d\n", r);
+      if(r <= 0)continue;
       printf("entrei while depois\n");
       printf("%d\n", opcode);
       if(opcode == 1){
@@ -70,20 +73,24 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
          req_pipe_path[39] = '\0';
          notif_pipe_path[39] = '\0';
          printf("antes open\n");
+         printf("req_pipe_path = [%s]\n", req_pipe_path);
+         printf("notif_pipe_path = [%s]\n", notif_pipe_path);
+
          notif_fd = open(notif_pipe_path, O_WRONLY);
          if(notif_fd < 0) continue;
          printf("apois notificacoes open\n");
-         request_fd = open(req_pipe_path, O_RDONLY);
          printf("apos open\n");
 
-         if(request_fd < 0) {
-            close(notif_fd);
-            continue;
-         }
+
          printf("antes do conectei\n");
          // se o read passou responde ao cliente, opcode = 1, result = 0
          write(notif_fd, &opcode_result, sizeof(char));
          write(notif_fd, &result, sizeof(char));
+         request_fd = open(req_pipe_path, O_RDONLY);
+         if(request_fd < 0) {
+            close(notif_fd);
+            continue;
+         }
          printf("CONECTOU CARALHOOOO\n");
       }
    }

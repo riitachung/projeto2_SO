@@ -54,14 +54,16 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
   }
 
   /*----------- ABRIR FIFO PEDIDOS ------------*/
-  if((request_fd = open(req_pipe_path, O_WRONLY)) < 0) exit (1);
-
+  request_fd = open(req_pipe_path, O_WRONLY);
+  if(request_fd < 0) exit(1);
   /*--------- GUARDAR DADOS DA SESSÃO ---------*/
   session.req_pipe = request_fd;
   session.notif_pipe = notif_fd;
   strncpy(session.req_pipe_path, req_pipe_path, MAX_PIPE_PATH_LENGTH);
   strncpy(session.notif_pipe_path, notif_pipe_path, MAX_PIPE_PATH_LENGTH);
-  printf("CONECTEI CARALHO\n");
+  printf("CLIENT connecting to %s\n", server_pipe_path);
+
+  printf("CONECTEI\n");
     return 0;
 }
 
