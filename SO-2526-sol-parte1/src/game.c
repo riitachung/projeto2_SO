@@ -1,5 +1,7 @@
 #include "board.h"
+#include "game.h"
 #include "display.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -22,7 +24,7 @@ typedef struct {
 */
 
 int thread_shutdown = 0;
-#include "game.h"
+
 int create_backup() {
     // clear the terminal for process transition
     terminal_cleanup();
@@ -186,7 +188,7 @@ int start_session(char* levels_dir) {
 
         if (strcmp(dot, ".lvl") == 0) {
             load_level(&game_board, entry->d_name, levels_dir, accumulated_points);
-            send_board(game_board);
+            send_board(fd, &game_board, 0, 0);
 
             
             draw_board(&game_board, DRAW_MENU);

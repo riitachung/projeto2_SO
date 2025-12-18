@@ -11,6 +11,7 @@
 struct SessionArguments {
    int req_pipe;
    int notif_pipe;
+   board_t board;
 };
 
 /*
@@ -55,16 +56,28 @@ enviar updates notif pipe
 termina se disconect (2)
 */
 
-char* send_board(board_t board, int victory, int game_over){
-   char* buffer;
-   buffer[0] = board.width;
-   buffer[1] = board.height;
-   buffer[2] = victory;
-   buffer[3] = game_over;
-   buffer[4] = board.pacman[0].accumulated;
-   buffer[5] = board.board;
+char*  convert_board (int fd, board_t board, int victory, int game_over){
 
-   write(session.notif_fd, buffer, sizeof(buffer));
+}
+
+void* update_board_thread (void* arg) {
+   struct SessionArguments *args = (struct SessionArguments*) arg;
+   int notif_pipe = args->notif_pipe;
+   board_t *board = &args->board;
+
+   while(1){
+      char opcode = 4;
+      write(notif_pipe, &opcode, sizeof(char));
+      write(notif_pipe, &board->width, sizeof(char));
+      write(notif_pipe, &board->height, sizeof(char));
+      write(notif_pipe, &board->victory, sizeof(char));           // victory
+      write(notif_pipe, &board->game_over, sizeof(char));         // game_over
+      write(notif_pipe, &board->pacmans[0].points, sizeof(char)); // accumulated_points
+      write(notif_pipe, board->data, &board.width * &board.height); // data
+      
+
+      
+   }
 }
 
 
@@ -130,10 +143,11 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
       struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
       args->req_pipe = request_fd;
       args->notif_pipe = notif_fd;
-      int result_main = start_session(levels_dir);     // TRATAAAAR
       debug("começou sessão..\n");
       pthread_t pid;
       pthread_create(&pid, NULL, session_thread, args);
+      int result_main = start_session(levels_dir);     // TRATAAAAR
+
       pthread_join(pid, NULL);
       free(args);
    }

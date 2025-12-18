@@ -37,7 +37,7 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
   /*----- ABRE O FIFO DE PEDIDO DE SESSÃO ------*/
   if((server_fd = open(server_pipe_path, O_WRONLY)) < 0) exit(1);       
   write(server_fd, &op_code, 1);                                        // mensagem para o pipe de registo do serv (opcode->1, char[40])
-  
+
   strncpy(request_buffer, req_pipe_path, sizeof(request_buffer) - 1);   // cria um buffer dos nomes dos paths dos pipes de pedidos e de notificações
   strncpy(notif_buffer, notif_pipe_path, sizeof(notif_buffer) - 1);
       debug("3..\n");
@@ -52,7 +52,7 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
   /*---------- LÊ RESPOSTA DO SERVER ----------*/  
   if(read(notif_fd, &opcode_notif, sizeof(char)) <= 0 || (opcode_notif != 1)) exit(1);                         
   if(read(notif_fd, &result, sizeof(char)) <= 0) exit(1);
-  debug("5..\n");
+    debug("5..\n");
 
   if(result != 0) {
     fprintf(stderr, "Servidor não aceitou a conexão\n");                // resultado tem de ser 0 e opcode retornado tem de ser 1
@@ -77,7 +77,7 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
 
   debug("deu certo cliente\n");
 
-    return 0;
+  return 0;
 }
 
 // recebe o command do client_main
@@ -122,13 +122,12 @@ char* receive_board_update(void) {
   read(session.notif_pipe, &opcode, sizeof(char));    // retorna ou recebe?
   debug("read reinou\n");
   char *buffer;
-  read(session.notif_pipe, buffer, sizeof(char));
-  /*read(session.notif_pipe, &board.height, sizeof(char));
+  read(session.notif_pipe, &board.height, sizeof(char));
   read(session.notif_pipe, &board.victory, sizeof(char));
   read(session.notif_pipe, &board.game_over, sizeof(char));
   read(session.notif_pipe, &board.accumulated_points, sizeof(char));*/
-  /*board.data = malloc(width * height);
+  board.data = malloc(width * height);
   read(session.notif_pipe, board.data, sizeof(board.data));
-  debug("acabei receive board\n");*/
+  debug("acabei receive board\n");
   return buffer;
 }
