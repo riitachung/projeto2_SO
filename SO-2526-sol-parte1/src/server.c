@@ -61,6 +61,7 @@ void* session_thread (void* arg) {
    char opcode, command;
 
    while(1) {
+      write(notif_fd, )
       read(req_pipe, &opcode, sizeof(char));
       if(opcode == 3){     // pacman play
          read(req_pipe, &command, sizeof(char));
@@ -80,7 +81,7 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    unlink(server_pipe_path);
    open_debug_file("server-debug.log");
 
-   // cria fifo do servidor
+   /*-------- CRIA O FIFO DO SERVIDOR ----------*/
    if(mkfifo(server_pipe_path, 0666) < 0) return -1;
    server_fd = open(server_pipe_path, O_RDONLY);
    if(server_fd < 0) return -1;
@@ -88,38 +89,36 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    char opcode, req_pipe_path[40], notif_pipe_path[40], opcode_result = 1, result = 0;
    read(server_fd, &opcode, sizeof(char));               // lê opcode enviado pelo client
 
+   /*------------CASO DO CONNECT-----------*/
    if(opcode == 1){                                      // se for pedido de inicio de sessao
       
       if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) return -1;
       if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40) return -1;
-          debug("40..\n");
+      debug("leu pipes do cliente..\n");
 
       req_pipe_path[39] = '\0';
       notif_pipe_path[39] = '\0';
-    debug("41..\n");
 
       notif_fd = open(notif_pipe_path, O_WRONLY);
-       debug("42..\n");
+      debug("abriu pipe das notificaçõe..\n");
 
       // se o read passou responde ao cliente, opcode = 1, result = 0
       write(notif_fd, &opcode_result, sizeof(char));
       write(notif_fd, &result, sizeof(char));
-          debug("43..\n");
-
-
+      debug("escreveu no pipe das notificações..\n");
 
       request_fd = open(req_pipe_path, O_RDONLY);
-                debug("44..\n");
+      debug("abriu pipe de requests..\n");
 
       if(request_fd < 0) {
          close(notif_fd);
       }
-                debug("45..\n");
 
       struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
       args->req_pipe = request_fd;
       args->notif_pipe = notif_fd;
-      debug("4454..\n");
+      int result_main = start_session(levels_dir);     // TRATAAAAR
+      debug("começou sessão..\n");
       pthread_t pid;
       pthread_create(&pid, NULL, session_thread, args);
       pthread_join(pid, NULL);

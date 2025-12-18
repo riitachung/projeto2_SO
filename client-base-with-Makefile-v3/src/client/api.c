@@ -129,7 +129,7 @@ Board receive_board_update(void) {
   read(session.notif_pipe, &board.game_over, sizeof(char));
   read(session.notif_pipe, &board.accumulated_points, sizeof(char));
   board.data = malloc(width * height);
-  read(session.notif_pipe, &board.data, sizeof(board.data));
+  read(session.notif_pipe, board.data, sizeof(board.data));
   debug("acabei receive board\n");
   return board;
 }
