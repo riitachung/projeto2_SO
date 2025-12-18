@@ -150,19 +150,19 @@ void* ghost_thread(void *arg) {
     }
 }
 
-int main(int argc, char** argv) {
-    if (argc != 2) {
+int start_session(char* levels_dir) {
+    /*if (argc != 2) {
         printf("Usage: %s <level_directory>\n", argv[0]);
         return -1;
-    }
+    }*/
 
     // Random seed for any random movements
     srand((unsigned int)time(NULL));
 
-    DIR* level_dir = opendir(argv[1]);
+    DIR* level_dir = opendir(levels_dir);
         
     if (level_dir == NULL) {
-        fprintf(stderr, "Failed to open directory: %s\n", argv[1]);
+        fprintf(stderr, "Failed to open directory: %s\n", levels_dir);
         return 0;
     }
 
@@ -184,7 +184,7 @@ int main(int argc, char** argv) {
         if (!dot) continue;
 
         if (strcmp(dot, ".lvl") == 0) {
-            load_level(&game_board, entry->d_name, argv[1], accumulated_points);
+            load_level(&game_board, entry->d_name, levels_dir, accumulated_points);
             draw_board(&game_board, DRAW_MENU);
             refresh_screen();
 

@@ -1,0 +1,14 @@
+# DIM: tamanho da matriz
+DIM 8 10
+# TEMPO: tempo por jogada
+TEMPO 200
+# sem pacman => pacman manual
+MON m3.m m2.m m1.m
+XXXXXXXXXX
+XXXXooo@XX
+XoooooooXX
+XooooooXXX
+XooooooooX
+XooooooooX
+XooooooooX
+XXXXXXXXXX

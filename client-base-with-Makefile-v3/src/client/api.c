@@ -9,7 +9,6 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
-
 struct Session {
   int id;
   int req_pipe;
@@ -17,6 +16,7 @@ struct Session {
   char req_pipe_path[MAX_PIPE_PATH_LENGTH + 1];
   char notif_pipe_path[MAX_PIPE_PATH_LENGTH + 1];
 };
+
 
 static struct Session session = {.id = -1};
 

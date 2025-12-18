@@ -1,3 +1,4 @@
+#include "board.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -5,6 +6,12 @@
 #include <stdio.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <pthread.h>
+
+struct SessionArguments {
+   int req_pipe;
+   int notif_pipe;
+};
 
 /*
 - aceita um unico cliente
@@ -41,6 +48,30 @@ COMO PROCEDER:
  *aplica move_pacman diretamente no board
 */
 
+/* loop
+ler pedido cliente
+atualizar jogo
+enviar updates notif pipe
+termina se disconect (2)
+*/
+void* session_thread (void* arg) {
+   struct SessionArguments *args = (struct SessionArguments*) arg;
+   int req_pipe = args->req_pipe;
+   int notif_pipe = args->notif_pipe;
+   char opcode, command;
+
+   while(1) {
+      read(req_pipe, &opcode, sizeof(char));
+      if(opcode == 3){     // pacman play
+         read(req_pipe, &command, sizeof(char));
+         
+      }
+   }
+   
+}
+
+
+
 int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIFO_de_registo
    if(argc != 4) return -1;
    char *levels_dir = argv[1];
@@ -50,7 +81,7 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    int server_fd, notif_fd, request_fd;
    unlink(server_pipe_path);
 
-   // cria fifo do seguidor
+   // cria fifo do servidor
    if(mkfifo(server_pipe_path, 0666) < 0) return -1;
    server_fd = open(server_pipe_path, O_RDONLY);
    if(server_fd < 0) return -1;
@@ -71,11 +102,21 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
       // se o read passou responde ao cliente, opcode = 1, result = 0
       write(notif_fd, &opcode_result, sizeof(char));
       write(notif_fd, &result, sizeof(char));
+      board_t *board = malloc(sizeof(board_t));
+      start_session(argv[1]);
       request_fd = open(req_pipe_path, O_RDONLY);
       if(request_fd < 0) {
          close(notif_fd);
       }
-   
+      struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
+      args->req_pipe = request_fd;
+      args->notif_pipe = notif_fd;
+
+      pthread_t pid;
+      pthread_create(&pid, NULL, session_thread, args);
+      pthread_join(pid, NULL);
+      free(args);
    }
+
    return 0;
 }

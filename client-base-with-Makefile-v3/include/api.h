@@ -1,6 +1,8 @@
 #ifndef API_H
 #define API_H
 
+#include <protocol.h>
+
 typedef struct {
   int width;
   int height;
