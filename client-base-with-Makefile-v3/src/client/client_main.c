@@ -21,8 +21,10 @@ static void *receiver_thread(void *arg) {
     (void)arg;
 
     while (true) {
-        
+            debug("ainda nao..\n");
+
         Board board = receive_board_update();
+    debug("peguei o board..\n");
 
         if (!board.data || board.game_over == 1){
             pthread_mutex_lock(&mutex);
@@ -44,6 +46,7 @@ static void *receiver_thread(void *arg) {
 }
 
 int main(int argc, char *argv[]) {
+    
     if (argc != 3 && argc != 4) {
         fprintf(stderr,
             "Usage: %s <client_id> <register_pipe> [commands_file]\n",
@@ -74,14 +77,17 @@ int main(int argc, char *argv[]) {
              "/tmp/%s_notification", client_id);
 
     open_debug_file("client-debug.log");
+    debug("pedwudwdwudguei o board..\n");
 
     if (pacman_connect(req_pipe_path, notif_pipe_path, register_pipe) != 0) {
         perror("Failed to connect to server");
         return 1;
     }
+    debug("pos conect..\n");
 
     pthread_t receiver_thread_id;
     pthread_create(&receiver_thread_id, NULL, receiver_thread, NULL);
+    debug("pos thread..\n");
 
     terminal_init();
     set_timeout(500);

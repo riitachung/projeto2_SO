@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <pthread.h>
-
+/*
 #define CONTINUE_PLAY 0
 #define NEXT_LEVEL 1
 #define QUIT_GAME 2
@@ -19,9 +19,10 @@ typedef struct {
     board_t *board;
     int ghost_index;
 } ghost_thread_arg_t;
+*/
 
 int thread_shutdown = 0;
-
+#include "game.h"
 int create_backup() {
     // clear the terminal for process transition
     terminal_cleanup();
