@@ -22,8 +22,14 @@ static void *receiver_thread(void *arg) {
 
     while (true) {
         debug("ainda nao..\n");
+        char *buffer = receive_board_update();
+        board.width = buffer[0];
+        board.height = buffer[1];
+        board.victory = buffer[2];
+        board.game_over = buffer[3];
+        board.accumulated_points = buffer[4];
+        board.data = buffer[5];
 
-        Board board = receive_board_update();
         debug("peguei o board..\n");
 
         if (!board.data || board.game_over == 1){

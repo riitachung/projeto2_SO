@@ -54,6 +54,20 @@ atualizar jogo
 enviar updates notif pipe
 termina se disconect (2)
 */
+
+char* send_board(board_t board, int victory, int game_over){
+   char* buffer;
+   buffer[0] = board.width;
+   buffer[1] = board.height;
+   buffer[2] = victory;
+   buffer[3] = game_over;
+   buffer[4] = board.pacman[0].accumulated;
+   buffer[5] = board.board;
+
+   write(session.notif_fd, buffer, sizeof(buffer));
+}
+
+
 void* session_thread (void* arg) {
    struct SessionArguments *args = (struct SessionArguments*) arg;
    int req_pipe = args->req_pipe;
@@ -61,7 +75,6 @@ void* session_thread (void* arg) {
    char opcode, command;
 
    while(1) {
-      write(notif_fd, )
       read(req_pipe, &opcode, sizeof(char));
       if(opcode == 3){     // pacman play
          read(req_pipe, &command, sizeof(char));

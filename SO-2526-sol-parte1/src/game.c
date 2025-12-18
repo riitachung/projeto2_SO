@@ -186,6 +186,9 @@ int start_session(char* levels_dir) {
 
         if (strcmp(dot, ".lvl") == 0) {
             load_level(&game_board, entry->d_name, levels_dir, accumulated_points);
+            send_board(game_board);
+
+            
             draw_board(&game_board, DRAW_MENU);
             refresh_screen();
 
@@ -312,3 +315,4 @@ int start_session(char* levels_dir) {
     }
     return 0;
 }
+
