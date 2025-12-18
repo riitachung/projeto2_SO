@@ -70,8 +70,6 @@ void* session_thread (void* arg) {
    
 }
 
-
-
 int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIFO_de_registo
    if(argc != 4) return -1;
    char *levels_dir = argv[1];
@@ -121,8 +119,7 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
       struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
       args->req_pipe = request_fd;
       args->notif_pipe = notif_fd;
-      result_main = start_session(levels_dir);
-                debug("4454..\n");
+      debug("4454..\n");
       pthread_t pid;
       pthread_create(&pid, NULL, session_thread, args);
       pthread_join(pid, NULL);

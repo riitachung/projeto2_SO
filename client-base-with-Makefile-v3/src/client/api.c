@@ -116,8 +116,13 @@ int pacman_disconnect() {
 Board receive_board_update(void) {
   char opcode;
   Board board = {0};
+  debug("comecei board\n");
   int width, height, tempo, victory, game_over, accumulated_points;
+  debug("pre do read\n");
+
   read(session.notif_pipe, &opcode, sizeof(char));    // retorna ou recebe?
+  debug("read reinou\n");
+
   read(session.notif_pipe, &board.width, sizeof(char));
   read(session.notif_pipe, &board.height, sizeof(char));
   read(session.notif_pipe, &board.victory, sizeof(char));
@@ -125,6 +130,6 @@ Board receive_board_update(void) {
   read(session.notif_pipe, &board.accumulated_points, sizeof(char));
   board.data = malloc(width * height);
   read(session.notif_pipe, &board.data, sizeof(board.data));
+  debug("acabei receive board\n");
   return board;
-
 }

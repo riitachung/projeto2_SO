@@ -21,10 +21,10 @@ static void *receiver_thread(void *arg) {
     (void)arg;
 
     while (true) {
-            debug("ainda nao..\n");
+        debug("ainda nao..\n");
 
         Board board = receive_board_update();
-    debug("peguei o board..\n");
+        debug("peguei o board..\n");
 
         if (!board.data || board.game_over == 1){
             pthread_mutex_lock(&mutex);
@@ -32,6 +32,7 @@ static void *receiver_thread(void *arg) {
             pthread_mutex_unlock(&mutex);
             break;
         }
+          debug("irei desenahr o board board\n");
 
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
