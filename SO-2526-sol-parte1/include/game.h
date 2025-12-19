@@ -28,7 +28,9 @@ typedef struct {
 /* --------- VARIÁVEIS GLOBAIS --------- */
 /* Definida no .c */
 extern int thread_shutdown;
-
+extern board_t game_board;
+extern int victory;
+extern int game_over;
 /* --------- FUNÇÕES EXPORTADAS --------- */
 
 /* Backup */
@@ -41,6 +43,8 @@ void screen_refresh(board_t *game_board, int mode);
 void* ncurses_thread(void *arg);
 void* pacman_thread(void *arg);
 void* ghost_thread(void *arg);
+
+void get_board(board_t *boardcpy);
 
 /* Sessão principal do jogo */
 int start_session(char *levels_dir);

@@ -9,6 +9,7 @@
 #include <pthread.h>
 
 struct SessionArguments {
+   int client_id;
    int req_pipe;
    int notif_pipe;
    board_t board;
@@ -54,29 +55,48 @@ ler pedido cliente
 atualizar jogo
 enviar updates notif pipe
 termina se disconect (2)
-*/
-
-char*  convert_board (int fd, board_t board, int victory, int game_over){
-
-}
+*/  
 
 void* update_board_thread (void* arg) {
+   debug("update board thread\n");
    struct SessionArguments *args = (struct SessionArguments*) arg;
    int notif_pipe = args->notif_pipe;
-   board_t *board = &args->board;
+   //board_t *board = &args->board;
+   board_t temp;
 
    while(1){
+      debug("entrei while serner\n");
+      get_board(&temp);
       char opcode = 4;
       write(notif_pipe, &opcode, sizeof(char));
-      write(notif_pipe, &board->width, sizeof(char));
-      write(notif_pipe, &board->height, sizeof(char));
-      write(notif_pipe, &board->victory, sizeof(char));           // victory
-      write(notif_pipe, &board->game_over, sizeof(char));         // game_over
-      write(notif_pipe, &board->pacmans[0].points, sizeof(char)); // accumulated_points
-      write(notif_pipe, board->data, &board.width * &board.height); // data
-      
+      write(notif_pipe, &temp.width, sizeof(char));
+      write(notif_pipe, &temp.height, sizeof(char));
+      write(notif_pipe, &victory, sizeof(int));                            // victory
+      write(notif_pipe, &game_over, sizeof(int));                          // game_over
+      write(notif_pipe, &temp.pacmans[0].points, sizeof(int));             // accumulated_points
+      char *data = malloc(temp.width * temp.height);
+      debug("escrevi cenas no notif pipe\n");
 
-      
+      for (int i = 0; i < temp.width * temp.height; i++) {
+         //data[i] = board_data(temp.board[i]);
+         debug("conteúdo do board: %c\n", &temp.board[i].content);
+         if(temp.board[i].content == 'P' || temp.board[i].content == 'M' || temp.board[i].content == 'W'){
+            data[i] = temp.board[i].content;
+         } else{
+            if(temp.board[i].has_dot == 1)
+               data[i] = '.';
+            else if (temp.board[i].has_portal == 1)
+               data[i] = '@';
+         }
+         debug("data: %c\n", data[i]);
+
+      }
+
+
+
+      write(notif_pipe, temp.board, (temp.width * temp.height));           // data 
+      free(data);
+      // TO-DO VER DATA
    }
 }
 
@@ -143,13 +163,18 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
       struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
       args->req_pipe = request_fd;
       args->notif_pipe = notif_fd;
-      debug("começou sessão..\n");
-      pthread_t pid;
-      pthread_create(&pid, NULL, session_thread, args);
-      int result_main = start_session(levels_dir);     // TRATAAAAR
 
-      pthread_join(pid, NULL);
+      debug("começou sessão..\n");
+      pthread_t tid_session, tid_board;
+      pthread_create(&tid_session, NULL, session_thread, args);
+      pthread_create(&tid_board, NULL, update_board_thread, args);
+      debug("comecei as threads\n");
+      result_main = start_session(levels_dir);     // TRATAAAAR
+      printf("%d\n", result_main);
+      pthread_join(tid_session, NULL);
+      pthread_join(tid_board, NULL);
       free(args);
+
    }
    close_debug_file();
 

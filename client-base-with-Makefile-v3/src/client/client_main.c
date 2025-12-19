@@ -22,14 +22,7 @@ static void *receiver_thread(void *arg) {
 
     while (true) {
         debug("ainda nao..\n");
-        Board board = receive_board_update();
-        /*char *buffer = receive_board_update();
-        board.width = buffer[0];
-        board.height = buffer[1];
-        board.victory = buffer[2];
-        board.game_over = buffer[3];
-        board.accumulated_points = buffer[4];
-        board.data = buffer[5];*/
+        board = receive_board_update();
 
         debug("peguei o board..\n");
 
@@ -44,8 +37,10 @@ static void *receiver_thread(void *arg) {
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
-
+        debug("agora ireimesmo desnhar o board\n");
         draw_board_client(board);
+        debug("desenhei o board\n");
+
         refresh_screen();
     }
 
@@ -108,9 +103,10 @@ int main(int argc, char *argv[]) {
     while (1) {
 
         pthread_mutex_lock(&mutex);
-        if (stop_execution)
+        if (stop_execution) {
             pthread_mutex_unlock(&mutex);
             break;
+        }       //TO-DO VER 
         pthread_mutex_unlock(&mutex);
 
         if (cmd_fp) {

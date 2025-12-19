@@ -1,0 +1,15 @@
+----- correr servidor -----
+rita: 
+./PacmanIST ~/SO/projeto2_SO/SO-2526-sol-parte1/levels 1 /tmp/server_reg
+vitoria: 
+./PacmanIST ~/tecnico/projeto2_SO/SO-2526-sol-parte1/levels 1 /tmp/server_reg
+
+----- compilar e correr correr cliente: -----
+cd client-base-with-Makefile-v3/
+make clean
+make
+./bin/client 1 /tmp/server_reg
+
+----- compilação servidor -----
+cd SO-2526-sol-parte1/src
+gcc server.c game.c board.c parser.c display.c -o PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw

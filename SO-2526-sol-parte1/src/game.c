@@ -24,6 +24,15 @@ typedef struct {
 */
 
 int thread_shutdown = 0;
+int victory = 0;
+int game_over = 0;
+
+board_t game_board;
+
+void get_board(board_t *boardcpy){
+    memcpy(boardcpy, &game_board, sizeof(game_board));
+}
+
 
 int create_backup() {
     // clear the terminal for process transition
@@ -43,12 +52,12 @@ int create_backup() {
         return 0;
     }
 }
-
+/*
 void screen_refresh(board_t * game_board, int mode) {
     debug("REFRESH\n");
     draw_board(game_board, mode);
     refresh_screen();     
-}
+}*/
 
 void* ncurses_thread(void *arg) {
     board_t *board = (board_t*) arg;
@@ -60,7 +69,7 @@ void* ncurses_thread(void *arg) {
             pthread_rwlock_unlock(&board->state_lock);
             pthread_exit(NULL);
         }
-        screen_refresh(board, DRAW_MENU);
+        //screen_refresh(board, DRAW_MENU);
         pthread_rwlock_unlock(&board->state_lock);
     }
 }
@@ -175,7 +184,7 @@ int start_session(char* levels_dir) {
     
     int accumulated_points = 0;
     bool end_game = false;
-    board_t game_board;
+    // board_t game_board;
 
     pid_t parent_process = getpid(); // Only the parent process can create backups
 
@@ -188,11 +197,10 @@ int start_session(char* levels_dir) {
 
         if (strcmp(dot, ".lvl") == 0) {
             load_level(&game_board, entry->d_name, levels_dir, accumulated_points);
-            send_board(fd, &game_board, 0, 0);
-
-            
-            draw_board(&game_board, DRAW_MENU);
-            refresh_screen();
+            victory = 0;
+            game_over = 0;
+            //draw_board(&game_board, DRAW_MENU);
+            //refresh_screen();
 
             while(true) {
                 pthread_t ncurses_tid, pacman_tid;
@@ -229,8 +237,9 @@ int start_session(char* levels_dir) {
                 free(retval);
 
                 if(result == NEXT_LEVEL) {
-                    screen_refresh(&game_board, DRAW_WIN);
-                    sleep_ms(game_board.tempo);
+                    victory = 1;
+                    //screen_refresh(&game_board, DRAW_WIN);
+                    //sleep_ms(game_board.tempo);
                     break;
                 }
 
@@ -292,13 +301,14 @@ int start_session(char* levels_dir) {
                 }
 
                 if(result == QUIT_GAME) {
-                    screen_refresh(&game_board, DRAW_GAME_OVER); 
-                    sleep_ms(game_board.tempo);
+                    game_over = 1;
+                    //screen_refresh(&game_board, DRAW_GAME_OVER); 
+                    //sleep_ms(game_board.tempo);
                     end_game = true;
                     break;
                 }
       
-                screen_refresh(&game_board, DRAW_MENU); 
+                // screen_refresh(&game_board, DRAW_MENU); 
 
                 accumulated_points = game_board.pacmans[0].points;      
             }

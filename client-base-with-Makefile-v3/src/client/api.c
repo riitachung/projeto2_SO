@@ -1,3 +1,9 @@
+/*
+gcc server.c game.c board.c parser.c display.c -o 
+PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw
+*/
+
+
 #include "api.h"
 #include "protocol.h"
 #include "debug.h"
@@ -17,7 +23,7 @@ struct Session {
   char notif_pipe_path[MAX_PIPE_PATH_LENGTH + 1];
 };
 
-
+extern Board board;
 static struct Session session = {.id = -1};
 
 int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char const *server_pipe_path) {
@@ -112,7 +118,7 @@ int pacman_disconnect() {
   return 0;
 }
 
-char* receive_board_update(void) {
+Board receive_board_update(void) {
   char opcode;
   //Board board = {0};
   debug("comecei board\n");
@@ -121,13 +127,14 @@ char* receive_board_update(void) {
 
   read(session.notif_pipe, &opcode, sizeof(char));    // retorna ou recebe?
   debug("read reinou\n");
-  char *buffer;
+  
+  read(session.notif_pipe, &board.width, sizeof(char));
   read(session.notif_pipe, &board.height, sizeof(char));
-  read(session.notif_pipe, &board.victory, sizeof(char));
-  read(session.notif_pipe, &board.game_over, sizeof(char));
-  read(session.notif_pipe, &board.accumulated_points, sizeof(char));*/
-  board.data = malloc(width * height);
-  read(session.notif_pipe, board.data, sizeof(board.data));
+  read(session.notif_pipe, &board.victory, sizeof(int));
+  read(session.notif_pipe, &board.game_over, sizeof(int));
+  read(session.notif_pipe, &board.accumulated_points, sizeof(int));
+  board.data = malloc(board.width * board.height);
+  read(session.notif_pipe, board.data, (board.width * board.height));
   debug("acabei receive board\n");
-  return buffer;
+  return board;
 }
