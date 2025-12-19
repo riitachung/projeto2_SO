@@ -69,33 +69,44 @@ void* update_board_thread (void* arg) {
       get_board(&temp);
       char opcode = 4;
       write(notif_pipe, &opcode, sizeof(char));
-      write(notif_pipe, &temp.width, sizeof(char));
-      write(notif_pipe, &temp.height, sizeof(char));
+      write(notif_pipe, &temp.width, sizeof(int));
+      write(notif_pipe, &temp.height, sizeof(int));
+      write(notif_pipe, &temp.tempo, sizeof(int));
       write(notif_pipe, &victory, sizeof(int));                            // victory
       write(notif_pipe, &game_over, sizeof(int));                          // game_over
       write(notif_pipe, &temp.pacmans[0].points, sizeof(int));             // accumulated_points
       char *data = malloc(temp.width * temp.height);
       debug("escrevi cenas no notif pipe\n");
+      debug("SERVER width=%d height=%d\n", temp.width, temp.height);
+
 
       for (int i = 0; i < temp.width * temp.height; i++) {
-         //data[i] = board_data(temp.board[i]);
-         debug("conteúdo do board: %c\n", &temp.board[i].content);
-         if(temp.board[i].content == 'P' || temp.board[i].content == 'M' || temp.board[i].content == 'W'){
-            data[i] = temp.board[i].content;
+         // TO-DO perceber pq e que pacman n aparece em content
+         if(/*temp.board[i].content == 'C' ||*/ temp.board[i].content == 'M'){
+            data[i] = 'M';
+         }else if (temp.board[i].content == 'W') {
+               data[i] = '#';
          } else{
             if(temp.board[i].has_dot == 1)
                data[i] = '.';
             else if (temp.board[i].has_portal == 1)
                data[i] = '@';
+            else data[i] = ' ';
          }
+         int x = temp.pacmans[0].pos_x;
+         int y = temp.pacmans[0].pos_y;
+
+         int idx = y * temp.width + x;
+         if (idx >= 0 && idx < temp.width * temp.height) {
+            data[idx] = 'C';
+         }
+
          debug("data: %c\n", data[i]);
-
       }
-
-
-
-      write(notif_pipe, temp.board, (temp.width * temp.height));           // data 
+      write(notif_pipe, data, (temp.width * temp.height));           // data 
       free(data);
+      debug("enviei board para o cliente\n");
+      usleep(200000); 
       // TO-DO VER DATA
    }
 }

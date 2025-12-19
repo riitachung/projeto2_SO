@@ -1,6 +1,6 @@
 DIM 6 6
-TEMPO 400
-PAC p1.p
+TEMPO 1000
+#PAC p1.p
 MON m1.m
 XXXooX
 XXXooX

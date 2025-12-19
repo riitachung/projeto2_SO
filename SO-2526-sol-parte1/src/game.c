@@ -191,12 +191,12 @@ int start_session(char* levels_dir) {
     struct dirent* entry;
     while ((entry = readdir(level_dir)) != NULL && !end_game) {
         if (entry->d_name[0] == '.') continue;
-
         char *dot = strrchr(entry->d_name, '.');
         if (!dot) continue;
 
         if (strcmp(dot, ".lvl") == 0) {
             load_level(&game_board, entry->d_name, levels_dir, accumulated_points);
+
             victory = 0;
             game_over = 0;
             //draw_board(&game_board, DRAW_MENU);
@@ -234,6 +234,7 @@ int start_session(char* levels_dir) {
                 free(ghost_tids);
 
                 int result = *retval;
+
                 free(retval);
 
                 if(result == NEXT_LEVEL) {

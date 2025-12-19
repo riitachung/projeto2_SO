@@ -21,25 +21,20 @@ static void *receiver_thread(void *arg) {
     (void)arg;
 
     while (true) {
-        debug("ainda nao..\n");
         board = receive_board_update();
 
-        debug("peguei o board..\n");
 
-        if (!board.data || board.game_over == 1){
+        if (/*!board.data ||*/ board.game_over == 1){
             pthread_mutex_lock(&mutex);
             stop_execution = true;
             pthread_mutex_unlock(&mutex);
             break;
         }
-          debug("irei desenahr o board board\n");
 
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
-        debug("agora ireimesmo desnhar o board\n");
         draw_board_client(board);
-        debug("desenhei o board\n");
 
         refresh_screen();
     }
@@ -94,6 +89,7 @@ int main(int argc, char *argv[]) {
 
     terminal_init();
     set_timeout(500);
+    if(board.width > 0 && board.height > 0)
     draw_board_client(board);
     refresh_screen();
 
