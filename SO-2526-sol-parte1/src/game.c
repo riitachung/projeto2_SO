@@ -179,9 +179,8 @@ int start_session(char* levels_dir) {
     }
 
     open_debug_file("debug.log");
-
+    //memset(&game_board, 0, sizeof(board_t));
     terminal_init();
-    
     int accumulated_points = 0;
     bool end_game = false;
     // board_t game_board;

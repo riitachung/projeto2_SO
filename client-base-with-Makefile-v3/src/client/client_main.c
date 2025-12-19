@@ -35,7 +35,6 @@ static void *receiver_thread(void *arg) {
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
         draw_board_client(board);
-
         refresh_screen();
     }
 
@@ -44,7 +43,7 @@ static void *receiver_thread(void *arg) {
 }
 
 int main(int argc, char *argv[]) {
-    
+
     if (argc != 3 && argc != 4) {
         fprintf(stderr,
             "Usage: %s <client_id> <register_pipe> [commands_file]\n",
