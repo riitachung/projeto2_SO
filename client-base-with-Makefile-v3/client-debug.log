@@ -23,34 +23,13 @@ VICTORY: 0, GAME_OVER: 0
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
+Command: D
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Command: S
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
@@ -64,26 +43,44 @@ VICTORY: 0, GAME_OVER: 0
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
-Command: S
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Command: S
-Cliente recebeu o Board
-Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 0
-Command: S
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
 Cliente recebeu o Board
 Cliente atualizou o Board
 VICTORY: 0, GAME_OVER: 0
-Command: S
+Command: D
 Cliente recebeu o Board
 Cliente atualizou o Board
-VICTORY: 0, GAME_OVER: 1
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Command: D
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 0, GAME_OVER: 0
+Cliente recebeu o Board
+Cliente atualizou o Board
+VICTORY: 1, GAME_OVER: 0
 O jogo acabou
 Stop execution
 Returning receiver thread...
 Receiver thread terminada
+Pacman desconectado
+refresh do screen e terminal cleanup

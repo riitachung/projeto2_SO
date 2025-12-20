@@ -43,6 +43,7 @@ void* pacman_thread(void *arg) {
    while (1) {
       sleep_ms(board->tempo * (1 + pacman->passo));
       debug("---THREAD DO PACMAN---\n");
+
       command_t* play;
       command_t c;
       if (pacman->n_moves == 0) {
@@ -50,6 +51,10 @@ void* pacman_thread(void *arg) {
          char opcode;
          char command_client;
          if(read(req_pipe, &opcode, sizeof(char)) <= 0){
+            game_over = 1;
+            break;
+         }
+         if(opcode == 2) {
             game_over = 1;
             break;
          }
@@ -119,7 +124,6 @@ void* ghost_thread(void *arg) {
    ghost_t* ghost = &board->ghosts[ghost_ind];
 
    while (1) {
-      sleep_ms(200);
       sleep_ms(board->tempo * (1 + ghost->passo));
       debug("---THREAD DO GHOST---\n");
 
@@ -144,11 +148,10 @@ void* session_thread (void* arg) {
    /* ------- ARGUMENTOS DA THREAD ------- */
    struct SessionArguments *args = (struct SessionArguments*) arg;
    int notif_pipe = args->notif_pipe;
-   //int req_pipe = args->req_pipe;
    char* level_dir = args->levels_dir;
    int current_level = args->current_level;
    int accumulated_points = args->accumulated_points;
-   //board_t *board = &args->board;
+   
 
    /*------------LER DIRETORIA-------------*/
    args->session_files = manage_files(level_dir);
@@ -185,10 +188,10 @@ void* session_thread (void* arg) {
          current_level++;
          unload_level(&args->board);
 
-         if(current_level != files.level_count){
+         if(current_level < files.level_count){
             load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
             victory = 0;
-
+            game_over = 0;
             debug("    nível %s carregado\n", files.level_files[current_level]);
             pthread_t pacman_tid;
             pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
@@ -200,7 +203,8 @@ void* session_thread (void* arg) {
                pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
             }
             debug("    Pacman e ghost thread criadas\n");
-         }
+
+         } 
       }
             
       pthread_rwlock_rdlock(&args->board.state_lock);
@@ -212,7 +216,7 @@ void* session_thread (void* arg) {
       // se o board ainda não foi inicializado no load_level, não escrever nada (porque, se escrevesse, iria ser lixo)
       if (temp.width == 0 && temp.height == 0 && temp.board == NULL) {
          debug("  Board ainda não está pronto, aguardando...\n");
-         sleep_ms(100000);
+         sleep_ms(1000);
          continue; 
       }
 
@@ -262,15 +266,17 @@ void* session_thread (void* arg) {
          break;                                      // sai do loop quando o jogo acaba para não atualizar mais o board
       }
       
-      sleep_ms(200); 
-      // TO-DO VER DATA
+      sleep_ms(temp.tempo); 
       debug("=== FIM DA ITERAÇÃO, VOLTANDO AO LOOP ===\n");
 
-   /*------------UNLOAD LEVEL, level++ -------------*/
-
    }
-   close(notif_pipe);
+   pthread_join(pacman_tid, NULL);
+   for(int i= 0; i < temp.n_ghosts; i++) {
+      pthread_join(ghost_tids[i], NULL);
+   }
+   free(ghost_tids);
    close(args->req_pipe);
+   close(args->notif_pipe);
    return NULL;
 }
 

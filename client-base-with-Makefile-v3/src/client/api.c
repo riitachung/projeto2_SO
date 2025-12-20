@@ -109,25 +109,31 @@ int pacman_disconnect() {
 
 Board receive_board_update(void) {
   char opcode;
-  //Board board = {0};
-  //int width, height, tempo, victory, game_over, accumulated_points;
+  size_t bytes_read;
+  bytes_read = read(session.notif_pipe, &opcode, sizeof(char));    // retorna ou recebe?
+  if(bytes_read <= 0) {
+    debug("Erro ao ler opcode 4\n");
+    board.game_over = 1;
+    return board;
+  }
+  if((read(session.notif_pipe, &board.width, sizeof(int)) <= 0) ||
+  (read(session.notif_pipe, &board.height, sizeof(int)) <= 0) ||
+  (read(session.notif_pipe, &board.tempo, sizeof(int)) <= 0) ||
+  (read(session.notif_pipe, &board.victory, sizeof(int)) <= 0) ||
+  (read(session.notif_pipe, &board.game_over, sizeof(int)) <= 0) ||
+  (read(session.notif_pipe, &board.accumulated_points, sizeof(int)) <= 0)){
+    board.game_over = 1;
+    return board;
+  }
 
-
-
-
-  read(session.notif_pipe, &opcode, sizeof(char));    // retorna ou recebe?
-  
-  read(session.notif_pipe, &board.width, sizeof(int));
-  read(session.notif_pipe, &board.height, sizeof(int));
-  read(session.notif_pipe, &board.tempo, sizeof(int));
-  read(session.notif_pipe, &board.victory, sizeof(int));
-  read(session.notif_pipe, &board.game_over, sizeof(int));
-  read(session.notif_pipe, &board.accumulated_points, sizeof(int));
   if(board.data == NULL)
     board.data = malloc(board.width * board.height);
   else 
     board.data = realloc(board.data, board.width * board.height);
-  read(session.notif_pipe, board.data, (board.width * board.height));
+  if(read(session.notif_pipe, board.data, (board.width * board.height)) <= 0){
+    board.game_over = 1;
+    return board;
+  }
 
   return board;
 }
