@@ -23,17 +23,15 @@ static void *receiver_thread(void *arg) {
 
     while (true) {
         board = receive_board_update();
-        debug("Cliente recebeu o Board\n");
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
         draw_board_client(board);
         refresh_screen();
-        debug("Cliente atualizou o Board\n");
         debug("VICTORY: %d, GAME_OVER: %d\n", board.victory, board.game_over);
         sleep_ms(tempo);
 
-        if (!board.data || board.game_over == 1 || board.victory == 1){
+        if (!board.data || board.game_over){
             draw_board_client(board);
             refresh_screen();
             pthread_mutex_lock(&mutex);

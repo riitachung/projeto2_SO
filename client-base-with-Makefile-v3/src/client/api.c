@@ -85,7 +85,6 @@ int pacman_play(char command) {
 }
 
 int pacman_disconnect() {
-  // TODO - implement me
   char opcode_disconnect = 2;
   if(session.req_pipe < 0) return -1;
   if(write(session.req_pipe, &opcode_disconnect, sizeof(char)) != 1) return -1; 
@@ -98,7 +97,7 @@ int pacman_disconnect() {
   unlink(session.req_pipe_path);
   unlink(session.notif_pipe_path);
   
-  /*----- REEINICIAR A SESSÃO -----*/
+  /*------ REEINICIAR A SESSÃO -------*/
   session.req_pipe = -1;
   session.notif_pipe = -1;
   strcpy(session.req_pipe_path, "");
@@ -110,7 +109,7 @@ int pacman_disconnect() {
 Board receive_board_update(void) {
   char opcode;
   size_t bytes_read;
-  bytes_read = read(session.notif_pipe, &opcode, sizeof(char));    // retorna ou recebe?
+  bytes_read = read(session.notif_pipe, &opcode, sizeof(char));    
   if(bytes_read <= 0) {
     debug("Erro ao ler opcode 4\n");
     board.game_over = 1;
