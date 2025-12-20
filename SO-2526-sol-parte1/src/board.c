@@ -466,6 +466,8 @@ int load_ghost(board_t* board) {
     return 0;
 }
 
+
+
 int load_level(board_t *board, char *filename, char* dirname, int points) {
 
     if (read_level(board, filename, dirname) < 0) {

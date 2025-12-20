@@ -23,11 +23,6 @@ static void *receiver_thread(void *arg) {
 
     while (true) {
         board = receive_board_update();
-        debug("  O cliente recebeu o board\n");
-        debug("  DIM %d %d POINTS %d\n", board.width, board.height, board.accumulated_points);
-        debug("  VICTORY %d GAME_OVER %d\n\n", board.victory, board.game_over);
-
-
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);

@@ -1,14 +1,15 @@
+#include "parser.h"
+#include "board.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "parser.h"
-#include "board.h"
 #include <fcntl.h>
+#include <dirent.h>
 
 int read_level(board_t* board, char* filename, char* dirname) {
 
-    char fullname[MAX_FILENAME];
+    char fullname[MAX_PATH];
     strcpy(fullname, dirname);
     strcat(fullname, "/");
     strcat(fullname, filename);
@@ -332,4 +333,54 @@ int read_line(int fd, char *buf) {
     if (n == -1) return -1;
     if (n == 0 && i == 0) return 0;
     return i;                         
+}
+
+
+
+files_t manage_files(const char *path){
+
+    DIR *directory_path = opendir(path);     // abre a diretoria path (dada no input do main)
+    struct dirent *directory_info;           // estrutura que armaneza as informações de cada ficheiro da diretoria
+    //char file_path[MAX_PATH];              // nome do caminho completo de cada ficheiro da diretoria ==> "path/.../filename"
+    files_t files = {0};                     // estrutura com nomes dos ficheiros do level, pacman, montros, 
+
+    // caso opendir falhe
+    if (directory_path == NULL) {
+        debug("directory: %s\n", directory_path);
+        printf("opendir failed on '%s'\n", path);  
+    }
+
+    // itera por todos ficheiros da diretoria 
+    while((directory_info = readdir(directory_path)) != NULL) {
+        
+        // filename = nome do ficheiro atual ==> "1.lvl"
+        char filename[MAX_FILENAME];    
+        strncpy(filename, directory_info->d_name, sizeof(filename) - 1);
+        filename[sizeof(filename) - 1] = '\0';
+        debug("filename: %s\n", filename);
+        // file_path = nome da diretoria do ficheiro (incluindo o ficheiro) ==> "path/.../1.lvl"
+        size_t len = strlen(filename);
+    
+        // guarda na struct files.level_files os nomes dos ficheiros do level com o path todo ==> files.level_files[] = ["path/.../1.lvl", "path/.../2.lvl", ...]
+        if (len > 4 && strcmp(filename + (len - 4), ".lvl") == 0){          
+            snprintf(files.level_files[files.level_count], MAX_FILENAME, "%s", filename);
+            files.level_count++;
+        }
+        
+        // guarda na struct files.ghost_files os nomes dos ficheiros dos ghost com o path todo ==> files.level_files[] = ["path/.../m1.m", "path/.../m2.m", ...]
+        else if (len > 2) {
+            if (strcmp(filename + (len - 2), ".m") == 0){
+                snprintf(files.ghost_files[files.ghost_count], MAX_FILENAME, "%s", filename);
+                files.ghost_count++;
+            }
+            
+            // guarda na struct files.pacman_files os nomes dos ficheiros dos pacmans com o path todo ==> files.level_files[] = ["path/.../p1.p", "path/.../p2.p", ...]
+            else if (strcmp(filename + (len - 2), ".p") == 0){
+                snprintf(files.pacman_files[files.pacman_count], MAX_FILENAME, "%s", filename);
+                files.pacman_count++;
+            } 
+        }
+    }
+    closedir(directory_path); 
+    return files;                   // retorna a estrutura com arrays de todos os file paths para cada tipo e a quantidade de ficheiros para cada
 }

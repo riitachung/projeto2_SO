@@ -20,10 +20,6 @@
 
 /* --------- ESTRUTURAS --------- */
 
-typedef struct {
-    board_t *board;
-    int ghost_index;
-} ghost_thread_arg_t;
 
 /* --------- VARIÁVEIS GLOBAIS --------- */
 /* Definida no .c */

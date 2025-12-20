@@ -12,7 +12,7 @@ make
 
 ----- compilação servidor -----
 cd SO-2526-sol-parte1/src
-gcc server.c game.c board.c parser.c display.c -o PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw
+gcc server.c board.c parser.c display.c -o PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw
 
 
 

@@ -1,0 +1,33 @@
+🚨 DEBUG NOVO — SE NAO APARECER, BINARIO ERRADO 🚨
+Cliente conectado
+Começo do jogo com a criaçõa da session_thread
+session_thread:
+2
+1
+filename: 1.lvl
+filename: m2.m
+filename: .
+filename: m3.m
+filename: second.lvl
+filename: m1.m
+filename: ..
+filename: p1.p
+level 1: 1.lvl
+DIM = 8 x 4
+TEMPO = 200
+PAC = levels/p1.p
+MON file: levels/m3.m
+MON file: levels/m2.m
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+Pacman passo: 1
+Pacman Pos = 4 x 1
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 4 x 1
