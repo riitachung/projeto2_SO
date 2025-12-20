@@ -101,7 +101,7 @@ void* pacman_thread(void *arg) {
 
       pthread_rwlock_unlock(&board->state_lock);
    }
-   pthread_rwlock_unlock(&board->state_lock);
+   //pthread_rwlock_unlock(&board->state_lock);
    //return (void*) retval;
    return NULL;
 }
@@ -262,13 +262,15 @@ void* session_thread (void* arg) {
          break;                                      // sai do loop quando o jogo acaba para não atualizar mais o board
       }
       
-      sleep_ms(200000); 
+      sleep_ms(200); 
       // TO-DO VER DATA
       debug("=== FIM DA ITERAÇÃO, VOLTANDO AO LOOP ===\n");
 
    /*------------UNLOAD LEVEL, level++ -------------*/
 
    }
+   close(notif_pipe);
+   close(args->req_pipe);
    return NULL;
 }
 
