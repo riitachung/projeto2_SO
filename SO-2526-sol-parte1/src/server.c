@@ -58,16 +58,24 @@ termina se disconect (2)
 */  
 
 void* update_board_thread (void* arg) {
-   debug("update board thread\n");
+   debug("\nupdate_board_thread:\n");
    struct SessionArguments *args = (struct SessionArguments*) arg;
    int notif_pipe = args->notif_pipe;
    //board_t *board = &args->board;
    board_t temp;
 
    while(1){
-      debug("entrei while serner\n");
+      debug("  Entrada no loop onde vão ser escritas as infos do Board\n");
       get_board(&temp);
       char opcode = 4;
+
+      // se o board ainda não foi inicializado no load_level, não escrever nada (porque, se escrevesse, iria ser lixo)
+      if (temp.width == 0 && temp.height == 0 && temp.board == NULL) {
+         debug("  Board ainda não está pronto, aguardando...\n");
+         usleep(100000);
+         continue; 
+      }
+
       write(notif_pipe, &opcode, sizeof(char));
       write(notif_pipe, &temp.width, sizeof(int));
       write(notif_pipe, &temp.height, sizeof(int));
@@ -76,9 +84,11 @@ void* update_board_thread (void* arg) {
       write(notif_pipe, &game_over, sizeof(int));                          // game_over
       write(notif_pipe, &temp.pacmans[0].points, sizeof(int));             // accumulated_points
       char *data = malloc(temp.width * temp.height);
-      debug("escrevi cenas no notif pipe\n");
-      debug("SERVER width=%d height=%d\n", temp.width, temp.height);
 
+      // TO-DO nao percebeo porque nao esta a dar no server-debug.log
+      debug("  As infos do tabuleiro foram escritas no pipe\n");
+      debug("  DIM %d %d, points = %d\n", temp.width, temp.height, temp.pacmans[0].points);
+      debug("  victory = %d, game_over = %d\n", victory, game_over);
 
       for (int i = 0; i < temp.width * temp.height; i++) {
          // TO-DO perceber pq e que pacman n aparece em content
@@ -101,14 +111,20 @@ void* update_board_thread (void* arg) {
             data[idx] = 'C';
          }
 
-         debug("data: %c\n", data[i]);
       }
       write(notif_pipe, data, (temp.width * temp.height));           // data 
       free(data);
-      debug("enviei board para o cliente\n");
+      debug("  Board enviado para o cliente\n");
+      
+      if (victory == 1 || game_over == 1) {
+         debug("O jogo terminou\n");
+         break;                                      // sai do loop quando o jogo acaba para não atualizar mais o board
+      }
+      
       usleep(200000); 
       // TO-DO VER DATA
    }
+   return NULL;
 }
 
 
@@ -137,6 +153,7 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    int server_fd, notif_fd, request_fd, result_main;
    unlink(server_pipe_path);
    open_debug_file("server-debug.log");
+   debug("Servidor criado\n");
 
    /*-------- CRIA O FIFO DO SERVIDOR ----------*/
    if(mkfifo(server_pipe_path, 0666) < 0) return -1;
@@ -151,21 +168,18 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
       
       if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) return -1;
       if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40) return -1;
-      debug("leu pipes do cliente..\n");
 
       req_pipe_path[39] = '\0';
       notif_pipe_path[39] = '\0';
 
       notif_fd = open(notif_pipe_path, O_WRONLY);
-      debug("abriu pipe das notificaçõe..\n");
 
       // se o read passou responde ao cliente, opcode = 1, result = 0
       write(notif_fd, &opcode_result, sizeof(char));
       write(notif_fd, &result, sizeof(char));
-      debug("escreveu no pipe das notificações..\n");
-
+      debug("Cliente conectado\n");
+      
       request_fd = open(req_pipe_path, O_RDONLY);
-      debug("abriu pipe de requests..\n");
 
       if(request_fd < 0) {
          close(notif_fd);
@@ -175,11 +189,10 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
       args->req_pipe = request_fd;
       args->notif_pipe = notif_fd;
 
-      debug("começou sessão..\n");
       pthread_t tid_session, tid_board;
       pthread_create(&tid_session, NULL, session_thread, args);
       pthread_create(&tid_board, NULL, update_board_thread, args);
-      debug("comecei as threads\n");
+      debug("Começo do jogo com a criaçõa das threads - update_board_thread e session_thread");
       result_main = start_session(levels_dir);     // TRATAAAAR
       printf("%d\n", result_main);
       pthread_join(tid_session, NULL);

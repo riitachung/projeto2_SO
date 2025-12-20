@@ -198,6 +198,7 @@ int start_session(char* levels_dir) {
 
             victory = 0;
             game_over = 0;
+
             //draw_board(&game_board, DRAW_MENU);
             //refresh_screen();
 
@@ -238,6 +239,7 @@ int start_session(char* levels_dir) {
 
                 if(result == NEXT_LEVEL) {
                     victory = 1;
+                    accumulated_points = game_board.pacmans[0].points;      
                     //screen_refresh(&game_board, DRAW_WIN);
                     //sleep_ms(game_board.tempo);
                     break;

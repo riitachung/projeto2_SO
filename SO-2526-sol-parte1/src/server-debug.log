@@ -1,8 +1,3 @@
-leu pipes do cliente..
-abriu pipe das notificaçõe..
-escreveu no pipe das notificações..
-abriu pipe de requests..
-começou sessão..
-comecei as threads
-update board thread
-entrei while serner
+Servidor criado
+Cliente conectado
+Começo do jogo com a criaçõa das threads - update_board_thread e session_thread

@@ -13,3 +13,8 @@ make
 ----- compilação servidor -----
 cd SO-2526-sol-parte1/src
 gcc server.c game.c board.c parser.c display.c -o PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw
+
+
+
+-> o mosntro nao esta a aparecer logo no inicio do jogo
+-> os pontos do pacman no final passam se (esta a ler lixo)

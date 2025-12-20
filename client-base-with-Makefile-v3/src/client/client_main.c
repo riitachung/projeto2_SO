@@ -12,30 +12,36 @@
 #include <unistd.h>
 #include <pthread.h>
 
-Board board;
+Board board = {0};
 bool stop_execution = false;
 int tempo;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static void *receiver_thread(void *arg) {
     (void)arg;
+    debug("receiver_thread:\n");
 
     while (true) {
         board = receive_board_update();
+        debug("  O cliente recebeu o board\n");
+        debug("  DIM %d %d POINTS %d\n", board.width, board.height, board.accumulated_points);
+        debug("  VICTORY %d GAME_OVER %d\n\n", board.victory, board.game_over);
 
-
-        if (/*!board.data ||*/ board.game_over == 1){
-            pthread_mutex_lock(&mutex);
-            stop_execution = true;
-            pthread_mutex_unlock(&mutex);
-            break;
-        }
 
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
         draw_board_client(board);
         refresh_screen();
+        sleep_ms(tempo);
+
+        if (!board.data || board.game_over == 1 || board.victory == 1){
+            pthread_mutex_lock(&mutex);
+            stop_execution = true;
+            pthread_mutex_unlock(&mutex);
+            debug("O jogo acabou\n");
+            break;
+        }
     }
 
     debug("Returning receiver thread...\n");
@@ -74,17 +80,17 @@ int main(int argc, char *argv[]) {
              "/tmp/%s_notification", client_id);
 
     open_debug_file("client-debug.log");
-    debug("pedwudwdwudguei o board..\n");
+    debug("Cliente pede login\n");
 
     if (pacman_connect(req_pipe_path, notif_pipe_path, register_pipe) != 0) {
         perror("Failed to connect to server");
         return 1;
     }
-    debug("pos conect..\n");
+    debug("Cliente conectado\n");
 
     pthread_t receiver_thread_id;
     pthread_create(&receiver_thread_id, NULL, receiver_thread, NULL);
-    debug("pos thread..\n");
+    debug("receiver_thread iniciada\n");
 
     terminal_init();
     set_timeout(500);
