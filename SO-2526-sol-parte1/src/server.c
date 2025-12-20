@@ -83,6 +83,7 @@ void* pacman_thread(void *arg) {
 
       int result = move_pacman(board, 0, play);
       debug("O pacman moveu-se com o move_pacman\n");
+      debug("result do move pacman --> %d\n", result);
       if (result == REACHED_PORTAL) {
          // Next level
          debug("NEX_LEVEL\n");
@@ -93,8 +94,9 @@ void* pacman_thread(void *arg) {
 
       if(result == DEAD_PACMAN) {
             // Restart from child, wait for child, then quit
-         debug("QUIT_GAME\n");
+         debug("DEAD_PACMAN -> QUIT_GAME\n");
          game_over = 1;
+         debug("CHEGA AO DEAD_PACMAN QUIT_GAME\n");
          //*retval = LOAD_BACKUP;
          break;
       }
@@ -117,6 +119,7 @@ void* ghost_thread(void *arg) {
    ghost_t* ghost = &board->ghosts[ghost_ind];
 
    while (1) {
+      sleep_ms(200);
       sleep_ms(board->tempo * (1 + ghost->passo));
       debug("---THREAD DO GHOST---\n");
 
@@ -177,37 +180,32 @@ void* session_thread (void* arg) {
          debug("=== INÍCIO DO LOOP DE ENVIO DO BOARD ===\n");
 
       if(victory){
+         debug("entrou no victory\n");
          accumulated_points = args->board.pacmans[0].points;
-         unload_level(&args->board);
          current_level++;
-         if(current_level == files.level_count){
-            game_over = 1;
-            break;
-         } 
-         load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
-         victory = 0;
+         unload_level(&args->board);
 
-         debug("    nível %s carregado\n", files.level_files[current_level]);
-         pthread_t pacman_tid;
-         pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
-         pthread_create(&pacman_tid, NULL, pacman_thread, (void*) args);
-         for (int i = 0; i < args->board.n_ghosts; i++) {
-            ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
-            arg_ghost->sessionArguments = args;
-            arg_ghost->ghost_index = i;
-            pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
+         if(current_level != files.level_count){
+            load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
+            victory = 0;
+
+            debug("    nível %s carregado\n", files.level_files[current_level]);
+            pthread_t pacman_tid;
+            pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
+            pthread_create(&pacman_tid, NULL, pacman_thread, (void*) args);
+            for (int i = 0; i < args->board.n_ghosts; i++) {
+               ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
+               arg_ghost->sessionArguments = args;
+               arg_ghost->ghost_index = i;
+               pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
+            }
+            debug("    Pacman e ghost thread criadas\n");
          }
-         debug("    Pacman e ghost thread criadas\n");
       }
-      if(game_over) break;
-      debug("  Entrada no loop onde vão ser escritas as infos do Board\n");
-      
+            
       pthread_rwlock_rdlock(&args->board.state_lock);
       temp = args->board;   // cópia da struct
       pthread_rwlock_unlock(&args->board.state_lock);
-
-      debug("  POSIÇÃO DO PACMAN: x=%d, y=%d, pontos=%d\n", 
-      temp.pacmans[0].pos_x, temp.pacmans[0].pos_y, temp.pacmans[0].points);
       
       char opcode = 4;
 
@@ -223,7 +221,9 @@ void* session_thread (void* arg) {
       write(notif_pipe, &temp.height, sizeof(int));
       write(notif_pipe, &temp.tempo, sizeof(int));
       write(notif_pipe, &victory, sizeof(int));                            // victory
+      debug("O server esta a escrever no victory: %d\n", victory);
       write(notif_pipe, &game_over, sizeof(int));                          // game_over
+      debug("O server esta a escrever no game_over: %d\n", game_over);
       write(notif_pipe, &temp.pacmans[0].points, sizeof(int));             // accumulated_points
       char *data = malloc(temp.width * temp.height);
 

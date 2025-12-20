@@ -23,20 +23,25 @@ static void *receiver_thread(void *arg) {
 
     while (true) {
         board = receive_board_update();
-        debug("    Cliente recebeu o Board\n");
+        debug("Cliente recebeu o Board\n");
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
         draw_board_client(board);
         refresh_screen();
-        debug("    Cliente atualizou o Board\n");
+        debug("Cliente atualizou o Board\n");
+        debug("VICTORY: %d, GAME_OVER: %d\n", board.victory, board.game_over);
         sleep_ms(tempo);
 
         if (!board.data || board.game_over == 1 || board.victory == 1){
+            draw_board_client(board);
+            refresh_screen();
             pthread_mutex_lock(&mutex);
             stop_execution = true;
             pthread_mutex_unlock(&mutex);
-            debug("    O jogo acabou\n");
+            debug("O jogo acabou\n");
+            sleep_ms(tempo);
+
             break;
         }
     }
@@ -102,6 +107,7 @@ int main(int argc, char *argv[]) {
 
         pthread_mutex_lock(&mutex);
         if (stop_execution) {
+            debug("Stop execution\n");
             pthread_mutex_unlock(&mutex);
             break;
         }       //TO-DO VER 
@@ -142,6 +148,7 @@ int main(int argc, char *argv[]) {
 
         if (command == 'Q') {
             debug("Client pressed 'Q', quitting game\n");
+            board.game_over = 1;
             break;
         }
 
@@ -151,12 +158,18 @@ int main(int argc, char *argv[]) {
 
     }
 
-    pacman_disconnect();
+    
     pthread_join(receiver_thread_id, NULL);
+    debug("Receiver thread terminada\n");
+
+    pacman_disconnect();
+    debug("Pacman desconectado\n");
     if (cmd_fp)
         fclose(cmd_fp);
 
     pthread_mutex_destroy(&mutex);
+    debug("refresh do screen e terminal cleanup\n");
+    refresh_screen();
     terminal_cleanup();
 
     return 0;
