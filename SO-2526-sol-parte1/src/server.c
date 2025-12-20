@@ -21,7 +21,7 @@ typedef struct SessionArguments {
 }SessionArguments;
 
 typedef struct {
-    struct SessionArguments sessionArguments;
+    struct SessionArguments *sessionArguments;
     int ghost_index;
 } ghost_thread_arg_t;
 
@@ -42,11 +42,11 @@ void* pacman_thread(void *arg) {
    //int *retval = malloc(sizeof(int));
    while (1) {
       sleep_ms(board->tempo * (1 + pacman->passo));
-      debug("ABRI THREAD DO PACMAN\n");
+      debug("---THREAD DO PACMAN---\n");
       command_t* play;
       command_t c;
       if (pacman->n_moves == 0) {
-         debug("comecei o pacman manual\n");
+         debug("O pacman manual começou\n");
          char opcode;
          char command_client;
          if(read(req_pipe, &opcode, sizeof(char)) <= 0){
@@ -65,7 +65,7 @@ void* pacman_thread(void *arg) {
          play = &pacman->moves[pacman->current_move%pacman->n_moves];
       }
 
-      debug("KEY %c\n", play->command);
+      debug("Comando: %c\n", play->command);
 
       // QUIT
       if (play->command == 'Q') {
@@ -82,8 +82,10 @@ void* pacman_thread(void *arg) {
       pthread_rwlock_rdlock(&board->state_lock);
 
       int result = move_pacman(board, 0, play);
+      debug("O pacman moveu-se com o move_pacman\n");
       if (result == REACHED_PORTAL) {
          // Next level
+         debug("NEX_LEVEL\n");
          victory = 1;
          //*retval = NEXT_LEVEL;
          break;
@@ -91,6 +93,7 @@ void* pacman_thread(void *arg) {
 
       if(result == DEAD_PACMAN) {
             // Restart from child, wait for child, then quit
+         debug("QUIT_GAME\n");
          game_over = 1;
          //*retval = LOAD_BACKUP;
          break;
@@ -105,7 +108,7 @@ void* pacman_thread(void *arg) {
 
 void* ghost_thread(void *arg) {
    ghost_thread_arg_t *arg_ghost = arg;
-   struct SessionArguments *args = &arg_ghost->sessionArguments;
+   struct SessionArguments *args = arg_ghost->sessionArguments;
    board_t *board = &args->board;
    int ghost_ind = arg_ghost->ghost_index;
 
@@ -115,21 +118,26 @@ void* ghost_thread(void *arg) {
 
    while (1) {
       sleep_ms(board->tempo * (1 + ghost->passo));
+      debug("---THREAD DO GHOST---\n");
 
       pthread_rwlock_rdlock(&board->state_lock);
-      if (game_over) {
+         if(game_over) {
+         debug("  game_over detetado\n");
+
          pthread_rwlock_unlock(&board->state_lock);
          pthread_exit(NULL);
       }
         
       move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
+      debug("O ghost moveu-se com o move_ghost\n");
+
       pthread_rwlock_unlock(&board->state_lock);
    }
 }
 
 void* session_thread (void* arg) {
    debug("\nsession_thread:\n");
-   debug("2\n");
+  
    /* ------- ARGUMENTOS DA THREAD ------- */
    struct SessionArguments *args = (struct SessionArguments*) arg;
    int notif_pipe = args->notif_pipe;
@@ -137,37 +145,37 @@ void* session_thread (void* arg) {
    char* level_dir = args->levels_dir;
    int current_level = args->current_level;
    int accumulated_points = args->accumulated_points;
-
-
-   debug("1\n");
-   pthread_t pacman_tid;
-   pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
    //board_t *board = &args->board;
 
    /*------------LER DIRETORIA-------------*/
    args->session_files = manage_files(level_dir);
+   debug("    Lida a diretoria %s e colocada numa estrutura files_t\n", level_dir);
    files_t files = args->session_files;
    current_level = 0;
    accumulated_points = 0;
    
    /*------------LOAD LEVEL-------------*/
-   debug("level 1: %s\n", files.level_files[current_level]);
    load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
    victory = 0;
    game_over = 0;
+   debug("    nível %s carregado\n", files.level_files[current_level]);
 
+   pthread_t pacman_tid;
+   pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
    pthread_create(&pacman_tid, NULL, pacman_thread, (void*) args);
-   
    for (int i = 0; i < args->board.n_ghosts; i++) {
       ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
-      arg_ghost->sessionArguments = *args;
+      arg_ghost->sessionArguments = args;
       arg_ghost->ghost_index = i;
       pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
    }
+   debug("    Pacman e ghost thread criadas\n");
    
    /*----------LÊ E ENVIA TABULEIRO-----------*/
    board_t temp;
    while(1){
+         debug("=== INÍCIO DO LOOP DE ENVIO DO BOARD ===\n");
+
       if(victory){
          accumulated_points = args->board.pacmans[0].points;
          unload_level(&args->board);
@@ -178,7 +186,18 @@ void* session_thread (void* arg) {
          } 
          load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
          victory = 0;
-         continue;
+
+         debug("    nível %s carregado\n", files.level_files[current_level]);
+         pthread_t pacman_tid;
+         pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
+         pthread_create(&pacman_tid, NULL, pacman_thread, (void*) args);
+         for (int i = 0; i < args->board.n_ghosts; i++) {
+            ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
+            arg_ghost->sessionArguments = args;
+            arg_ghost->ghost_index = i;
+            pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
+         }
+         debug("    Pacman e ghost thread criadas\n");
       }
       if(game_over) break;
       debug("  Entrada no loop onde vão ser escritas as infos do Board\n");
@@ -187,6 +206,9 @@ void* session_thread (void* arg) {
       temp = args->board;   // cópia da struct
       pthread_rwlock_unlock(&args->board.state_lock);
 
+      debug("  POSIÇÃO DO PACMAN: x=%d, y=%d, pontos=%d\n", 
+      temp.pacmans[0].pos_x, temp.pacmans[0].pos_y, temp.pacmans[0].points);
+      
       char opcode = 4;
 
       // se o board ainda não foi inicializado no load_level, não escrever nada (porque, se escrevesse, iria ser lixo)
@@ -242,6 +264,7 @@ void* session_thread (void* arg) {
       
       sleep_ms(200000); 
       // TO-DO VER DATA
+      debug("=== FIM DA ITERAÇÃO, VOLTANDO AO LOOP ===\n");
 
    /*------------UNLOAD LEVEL, level++ -------------*/
 
@@ -259,8 +282,8 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
 
    int server_fd, notif_fd, request_fd/*, result_main*/;
    unlink(server_pipe_path);
-    open_debug_file("debug.log");
-    debug("🚨 DEBUG NOVO — SE NAO APARECER, BINARIO ERRADO 🚨\n");
+   open_debug_file("server-debug.log");
+   debug("Servidor iniciado\n");
 
 
    /*-------- CRIA O FIFO DO SERVIDOR ----------*/
@@ -274,6 +297,7 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    /*------------CASO DO CONNECT-----------*/
    if(opcode == 1){                                      // se for pedido de inicio de sessao
       
+      debug("Cliente pediu para se conectar\n");
       if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) return -1;
       if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40) return -1;
 

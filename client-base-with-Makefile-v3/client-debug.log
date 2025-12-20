@@ -2,5 +2,5 @@ Cliente pede login
 Cliente conectado
 receiver_thread iniciada
 receiver_thread:
-O jogo acabou
-Returning receiver thread...
+    Cliente recebeu o Board
+    Cliente atualizou o Board

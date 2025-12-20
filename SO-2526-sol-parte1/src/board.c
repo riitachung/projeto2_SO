@@ -470,6 +470,7 @@ int load_ghost(board_t* board) {
 
 int load_level(board_t *board, char *filename, char* dirname, int points) {
 
+    debug("load_level:\n");
     if (read_level(board, filename, dirname) < 0) {
         printf("Failed to load level\n");
         return -1;
@@ -490,6 +491,7 @@ int load_level(board_t *board, char *filename, char* dirname, int points) {
     }
 
     //print_board(board);
+    debug("\n");
     return 0;
 }
 

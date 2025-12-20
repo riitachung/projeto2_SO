@@ -357,7 +357,7 @@ files_t manage_files(const char *path){
         char filename[MAX_FILENAME];    
         strncpy(filename, directory_info->d_name, sizeof(filename) - 1);
         filename[sizeof(filename) - 1] = '\0';
-        debug("filename: %s\n", filename);
+
         // file_path = nome da diretoria do ficheiro (incluindo o ficheiro) ==> "path/.../1.lvl"
         size_t len = strlen(filename);
     
