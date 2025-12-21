@@ -54,10 +54,10 @@ void draw_board_client(Board board) {
     // Draw the border/title
     attron(COLOR_PAIR(5));
     mvprintw(0, 0, "=== PACMAN GAME ===");
-    if (board.game_over) {
-        mvprintw(1, 0, " GAME OVER ");
-    } else if (board.victory) {
+    if (board.victory) {
         mvprintw(1, 0, " VICTORY ");
+    } else if (board.game_over) {
+        mvprintw(1, 0, " GAME OVER ");
     } else {
         mvprintw(1, 0, " Use W/A/S/D to move | Q to quit");
     }

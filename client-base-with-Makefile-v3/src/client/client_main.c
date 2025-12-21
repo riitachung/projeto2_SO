@@ -23,25 +23,23 @@ static void *receiver_thread(void *arg) {
 
     while (true) {
         board = receive_board_update();
+
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
+
         draw_board_client(board);
         refresh_screen();
-        debug("VICTORY: %d, GAME_OVER: %d\n", board.victory, board.game_over);
-        sleep_ms(tempo);
-
-        if (!board.data || board.game_over){
-            draw_board_client(board);
-            refresh_screen();
+        
+        if (!board.data || board.game_over == 1){
             pthread_mutex_lock(&mutex);
             stop_execution = true;
             pthread_mutex_unlock(&mutex);
-            debug("O jogo acabou\n");
-            sleep_ms(tempo);
-
+            debug("!board.data || board.game_over == 1\n");
             break;
         }
+
+        sleep_ms(tempo);
     }
 
     debug("Returning receiver thread...\n");
@@ -145,22 +143,22 @@ int main(int argc, char *argv[]) {
             continue;
 
         if (command == 'Q') {
+            pacman_disconnect();
             debug("Client pressed 'Q', quitting game\n");
-            board.game_over = 1;
-            break;
         }
 
         debug("Command: %c\n", command);
 
+        pthread_mutex_unlock(&mutex);
+
         pacman_play(command);
 
     }
-
     
     pthread_join(receiver_thread_id, NULL);
     debug("Receiver thread terminada\n");
 
-    pacman_disconnect();
+    //pacman_disconnect();
     debug("Pacman desconectado\n");
     if (cmd_fp)
         fclose(cmd_fp);

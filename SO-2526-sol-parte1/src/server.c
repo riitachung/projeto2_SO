@@ -36,6 +36,7 @@ typedef struct {
 int victory = 0;
 int game_over = 0;
 
+pthread_rwlock_t victory_lock;  
 
 /*--------- TAREFA DO PACMAN -----------*/
 void* pacman_thread(void *arg) {
@@ -56,11 +57,15 @@ void* pacman_thread(void *arg) {
          char opcode;
          char command_client;
          if(read(req_pipe, &opcode, sizeof(char)) <= 0){             // Lê opcode de pedido de comando
+            pthread_rwlock_wrlock(&victory_lock);
             game_over = 1;
+            pthread_rwlock_unlock(&victory_lock);
             break;
          }
          if(opcode == 2) {                                           // pedido para disconnect
+            pthread_rwlock_wrlock(&victory_lock);
             game_over = 1;
+            pthread_rwlock_unlock(&victory_lock);
             break;
          }
          if(opcode != 3) {
@@ -80,30 +85,41 @@ void* pacman_thread(void *arg) {
 
       // QUIT
       if (play->command == 'Q') {
+         pthread_rwlock_wrlock(&victory_lock);
          game_over = 1;
+         pthread_rwlock_unlock(&victory_lock);
       }
 
-      pthread_rwlock_rdlock(&board->state_lock);
+      pthread_rwlock_wrlock(&board->state_lock);
 
       int result = move_pacman(board, 0, play);
       debug("result do move pacman --> %d\n", result);
        // NEXT LEVEL
       if (result == REACHED_PORTAL) {
          debug("NEXT_LEVEL\n");
+         pthread_rwlock_wrlock(&victory_lock);
          victory = 1;
+         pthread_rwlock_unlock(&victory_lock);
+         pthread_rwlock_unlock(&board->state_lock);
+
          break;
       }
       // PACMAN MORTO
       if(result == DEAD_PACMAN) {
          debug("DEAD_PACMAN -> QUIT_GAME\n");
+         pthread_rwlock_wrlock(&victory_lock);
          game_over = 1;
+         pthread_rwlock_unlock(&victory_lock);
          debug("CHEGA AO DEAD_PACMAN QUIT_GAME\n");
+         pthread_rwlock_unlock(&board->state_lock);
+
          //*retval = LOAD_BACKUP;
          break;
       }
 
       pthread_rwlock_unlock(&board->state_lock);
    }
+   debug("vou acabar pacman thread\n");
    return NULL;
 }
 
@@ -118,18 +134,21 @@ void* ghost_thread(void *arg) {
    ghost_t* ghost = &board->ghosts[ghost_ind];
 
    while (1) {
-      sleep
       sleep_ms(board->tempo * (1 + ghost->passo));
 
-      pthread_rwlock_rdlock(&board->state_lock);
-         if(game_over) {                                    // se detetado game-over exit
+      pthread_rwlock_rdlock(&victory_lock);
+      int current_game_over = game_over;
+      int current_victory = victory;
+      pthread_rwlock_unlock(&victory_lock);
+      
+      if(current_game_over || current_victory) {
          debug("game_over detetado\n");
-
-         pthread_rwlock_unlock(&board->state_lock);
+         debug("vou acabar ghost thread\n");
          pthread_exit(NULL);
       }
-      move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
 
+      pthread_rwlock_rdlock(&board->state_lock);
+      move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
       pthread_rwlock_unlock(&board->state_lock);
    }
 }
@@ -137,14 +156,13 @@ void* ghost_thread(void *arg) {
 
 /*---------- THREAD GESTORA DE SESSÃO -----------*/
 void* session_thread (void* arg) {
-  
    // ARGUMENTOS DA THREAD
    struct SessionArguments *args = (struct SessionArguments*) arg;
    int notif_pipe = args->notif_pipe;
    char* level_dir = args->levels_dir;
    int current_level = args->current_level;
    int accumulated_points = args->accumulated_points;
-   
+   int threads_running = 1;
 
    // LÊ DIRETORIA
    args->session_files = manage_files(level_dir);
@@ -155,42 +173,112 @@ void* session_thread (void* arg) {
    
    // DÁ LOAD AO PRIMEIRO NÍVEL
    load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
-
    debug("nível %s carregado\n", files.level_files[current_level]);
 
    // COMEÇA AS THREADS
+   int n_ghosts = args->board.n_ghosts;
    pthread_t pacman_tid;
-   pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
+   pthread_t *ghost_tids = malloc(n_ghosts * sizeof(pthread_t));
    pthread_create(&pacman_tid, NULL, pacman_thread, (void*) args);
-   for (int i = 0; i < args->board.n_ghosts; i++) {
+   for (int i = 0; i < n_ghosts; i++) {
       ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
       arg_ghost->sessionArguments = args;
       arg_ghost->ghost_index = i;
       pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
    }
-   debug("Pacman e ghost thread criadas\n");
+   debug("Pacman e ghost threads criadas\n");
    
    // LÊ E ENVIA PERIODICAMENTE O TABULEIRO
    board_t temp;
    while(1){
-      debug("=== INÍCIO DO LOOP DE ENVIO DO BOARD ===\n");
+      
+      pthread_rwlock_rdlock(&args->board.state_lock);
+      temp = args->board;   // cópia da struct
+      pthread_rwlock_unlock(&args->board.state_lock);
+      
+      pthread_rwlock_rdlock(&victory_lock);
+      int current_victory = victory;
+      int current_game_over = game_over;
+      pthread_rwlock_unlock(&victory_lock);
+      
+      char opcode = 4;
+
+      // se o board ainda não foi inicializado no load_level, não escrever nada
+      if (temp.width == 0 && temp.height == 0 && temp.board == NULL) {
+         debug("Board ainda nao disponível\n");
+         //sleep_ms(1000);
+         continue; 
+      }
+
+      // ESCREVE NO PIPE DAS NOTIFICAÇÕES A INFORMAÇÃO PARA CONSTRUIR TABULEIRO
+      write(notif_pipe, &opcode, sizeof(char));
+      write(notif_pipe, &temp.width, sizeof(int));
+      write(notif_pipe, &temp.height, sizeof(int));
+      write(notif_pipe, &temp.tempo, sizeof(int));
+      write(notif_pipe, &current_victory, sizeof(int));                            
+      write(notif_pipe, &current_game_over, sizeof(int));                          
+      write(notif_pipe, &temp.pacmans[0].points, sizeof(int));  
+      
+      char *data = malloc(temp.width * temp.height);
+
+      for (int i = 0; i < temp.width * temp.height; i++) {
+         if(temp.board[i].content == 'M'){
+            data[i] = 'M';
+         } else if (temp.board[i].content == 'W') {
+            data[i] = '#';
+         } else {
+            if(temp.board[i].has_dot == 1)
+               data[i] = '.';
+            else if (temp.board[i].has_portal == 1)
+               data[i] = '@';
+            else data[i] = ' ';
+         }
+      }
+      int x = temp.pacmans[0].pos_x;
+      int y = temp.pacmans[0].pos_y;
+      int idx = y * temp.width + x;
+      if (idx >= 0 && idx < temp.width * temp.height) {
+         data[idx] = 'C';
+      }
+
+      write(notif_pipe, data, (temp.width * temp.height));
+      free(data);
+      
+      // VERIFICA SE DEVE SAIR (APÓS ENVIAR O BOARD)
+      if (/*(current_victory == 1 && */current_game_over == 1) {
+         debug("O jogo terminou completamente\n");
+         break;
+      }  
 
       // no caso de vitória (reached_portal)
-      if(victory) {
-         accumulated_points = args->board.pacmans[0].points;
+      if(current_victory) {
+         accumulated_points = args->board.pacmans[0].points;  // Guardar pontos
          current_level++;
-         unload_level(&args->board);
-
+         pthread_join(pacman_tid, NULL);
+         for(int i = 0; i < n_ghosts; i++){
+            pthread_join(ghost_tids[i], NULL);
+         }
+         free(ghost_tids);
+         threads_running = 0;
          // se ainda houver mais levels para jogar
          if(current_level < files.level_count){
-            load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);   // dá load
+            // FAZER UNLOAD ANTES DE CARREGAR O PRÓXIMO
+            unload_level(&args->board);
+            load_level(&args->board, files.level_files[current_level], level_dir, accumulated_points);
             debug("nível %s carregado\n", files.level_files[current_level]);
             
+            // REINICIA VICTORY E GAME OVER = 0 DEPOIS DE DAR LOAD A UM NOVO LEVEL
+            pthread_rwlock_wrlock(&victory_lock);
+            victory = 0;
+            game_over = 0;
+            pthread_rwlock_unlock(&victory_lock);
+
             // recomeça as threads
-            pthread_t pacman_tid;
-            pthread_t *ghost_tids = malloc(args->board.n_ghosts * sizeof(pthread_t));
+            //pthread_t pacman_tid;
+            n_ghosts = args->board.n_ghosts;
+            ghost_tids = malloc(n_ghosts * sizeof(pthread_t));
             pthread_create(&pacman_tid, NULL, pacman_thread, (void*) args);
-            for (int i = 0; i < args->board.n_ghosts; i++) {
+            for (int i = 0; i < n_ghosts; i++) {
                ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
                arg_ghost->sessionArguments = args;
                arg_ghost->ghost_index = i;
@@ -198,84 +286,38 @@ void* session_thread (void* arg) {
             }
             debug("Pacman e ghost thread criadas\n");
 
-         } 
-      }
-            
-      pthread_rwlock_rdlock(&args->board.state_lock);
-      temp = args->board;   // cópia da struct
-      pthread_rwlock_unlock(&args->board.state_lock);
-      
-      char opcode = 4;
-
-      // se o board ainda não foi inicializado no load_level, não escrever nada (porque, se escrevesse, iria ser lixo)
-      if (temp.width == 0 && temp.height == 0 && temp.board == NULL) {
-         debug("  Board ainda não está pronto, aguardando...\n");
-         sleep_ms(1000);
-         continue; 
-      }
-
-      // ESCREVE NO PIPE DAS NOTIFICAÇÕES A INFORMAÇÃO PARA CONSTRUIR TABULEIRO           TO-DO fazer erros de escrita
-      write(notif_pipe, &opcode, sizeof(char));
-      write(notif_pipe, &temp.width, sizeof(int));
-      write(notif_pipe, &temp.height, sizeof(int));
-      write(notif_pipe, &temp.tempo, sizeof(int));
-      write(notif_pipe, &victory, sizeof(int));                            
-      write(notif_pipe, &game_over, sizeof(int));                          
-      write(notif_pipe, &temp.pacmans[0].points, sizeof(int));             
-      
-      char *data = malloc(temp.width * temp.height);
-      debug("victory = %d, game_over = %d\n", victory, game_over);
-
-      for (int i = 0; i < temp.width * temp.height; i++) {
-         // TO-DO perceber pq e que pacman n aparece em content
-         if(/*temp.board[i].content == 'C' ||*/ temp.board[i].content == 'M'){
-            data[i] = 'M';
-         }else if (temp.board[i].content == 'W') {
-               data[i] = '#';
-         } else{
-            if(temp.board[i].has_dot == 1)
-               data[i] = '.';
-            else if (temp.board[i].has_portal == 1)
-               data[i] = '@';
-            else data[i] = ' ';
+         } else {
+            // último nível completo
+            pthread_rwlock_wrlock(&victory_lock);
+            game_over = 1;
+            pthread_rwlock_unlock(&victory_lock);
+            debug("Último nível completo, game_over setado\n");
+            // NÃO FAZER UNLOAD - ainda precisa do board para enviar o último frame
          }
-         int x = temp.pacmans[0].pos_x;
-         int y = temp.pacmans[0].pos_y;
-
-         int idx = y * temp.width + x;
-         if (idx >= 0 && idx < temp.width * temp.height) {
-            data[idx] = 'C';
-         }
-
-      }
-      write(notif_pipe, data, (temp.width * temp.height));           // manda data toda do tabuleiro para o cliente
-      free(data);
-      debug("Board enviado para o cliente\n");
-      // REEINICIA VICTORY E GAME OVER = 0 DEPOIS DE DAR LOAD A UM NOVO LEVEL
-      victory = 0;
-      game_over = 0;
-
-      if (victory == 1 || game_over == 1) {
-         debug("O jogo terminou\n");
-         break;                                      // sai do loop quando o jogo acaba para não atualizar mais o board
+         debug("vou voltar ao loop\n");
       }
       
       sleep_ms(temp.tempo); 
-  
       debug("=== FIM DA ITERAÇÃO, VOLTANDO AO LOOP ===\n");
-
    }
+   
    // ESPERA PELAS THREADS
-   pthread_join(pacman_tid, NULL);
-   for(int i = 0; i < temp.n_ghosts; i++) {
-      pthread_join(ghost_tids[i], NULL);
+   if(threads_running){
+      pthread_join(pacman_tid, NULL);
+      for(int i = 0; i < n_ghosts; i++) {
+         pthread_join(ghost_tids[i], NULL);
+      }
+      debug("esperei pelas threads\n");
+      free(ghost_tids);
    }
-   free(ghost_tids);
-   //close(args->req_pipe);
+   
+   // AGORA SIM, FAZER UNLOAD DO ÚLTIMO NÍVEL
+   unload_level(&args->board);
+   debug("unload do último nível feito\n");
+   close(args->req_pipe);
    close(args->notif_pipe);
    return NULL;
 }
-
 
 
 int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIFO_de_registo
@@ -289,51 +331,55 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    open_debug_file("server-debug.log");
    debug("Servidor iniciado\n");
 
-
    /*-------- CRIA O FIFO DO SERVIDOR ----------*/
    if(mkfifo(server_pipe_path, 0666) < 0) return -1;
+
    server_fd = open(server_pipe_path, O_RDONLY);
    if(server_fd < 0) return -1;
 
    char opcode, req_pipe_path[40], notif_pipe_path[40], opcode_result = 1, result = 0;
-   read(server_fd, &opcode, sizeof(char));               // lê opcode enviado pelo client
+   while(1){
+      read(server_fd, &opcode, sizeof(char));               // lê opcode enviado pelo client
 
    /*------------CASO DO CONNECT-----------*/
-   if(opcode == 1){                                      // se for pedido de inicio de sessao
-      
-      debug("Cliente pediu para se conectar\n");
-      if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) return -1;
-      if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40) return -1;
-
-      req_pipe_path[39] = '\0';
-      notif_pipe_path[39] = '\0';
-
-      notif_fd = open(notif_pipe_path, O_WRONLY);
-
-      // se o read passou responde ao cliente, opcode = 1, result = 0
-      write(notif_fd, &opcode_result, sizeof(char));
-      write(notif_fd, &result, sizeof(char));
-      debug("Cliente conectado\n");
-      
-      request_fd = open(req_pipe_path, O_RDONLY);
-
-      if(request_fd < 0) {
-         close(notif_fd);
-      }
-
-      struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
-      args->req_pipe = request_fd;
-      args->notif_pipe = notif_fd;
-      args->levels_dir = levels_dir;
-
-      pthread_t tid_session;
-      pthread_create(&tid_session, NULL, session_thread, args);
-      debug("Começo do jogo com a criaçõa da session_thread");
   
-      pthread_join(tid_session, NULL);
-      free(args);
+      if(opcode == 1){                                      // se for pedido de inicio de sessao
+         
+         debug("Cliente pediu para se conectar\n");
+         if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) continue;
+         if(read(server_fd, notif_pipe_path, sizeof(notif_pipe_path)) != 40) continue;
 
+         req_pipe_path[39] = '\0';
+         notif_pipe_path[39] = '\0';
+
+         notif_fd = open(notif_pipe_path, O_WRONLY);
+
+         // se o read passou responde ao cliente, opcode = 1, result = 0
+         write(notif_fd, &opcode_result, sizeof(char));
+         write(notif_fd, &result, sizeof(char));
+         debug("Cliente conectado\n");
+         
+         request_fd = open(req_pipe_path, O_RDONLY);
+
+         if(request_fd < 0) {
+            close(notif_fd);
+         }
+
+         struct SessionArguments *args = malloc(sizeof(struct SessionArguments));
+         args->req_pipe = request_fd;
+         args->notif_pipe = notif_fd;
+         args->levels_dir = levels_dir;
+
+         pthread_t tid_session;
+         pthread_create(&tid_session, NULL, session_thread, args);
+         debug("Começo do jogo com a criaçõa da session_thread");
+   
+         pthread_join(tid_session, NULL);
+         free(args);
+      }
    }
+   
+   pthread_rwlock_destroy(&victory_lock);
    close_debug_file();
 
    return 0;

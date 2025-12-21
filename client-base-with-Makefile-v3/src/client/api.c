@@ -85,18 +85,26 @@ int pacman_play(char command) {
 }
 
 int pacman_disconnect() {
+  debug("1\n");
   char opcode_disconnect = 2;
   if(session.req_pipe < 0) return -1;
-  if(write(session.req_pipe, &opcode_disconnect, sizeof(char)) != 1) return -1; 
-
+  debug("2\n");
+  
+  if(write(session.req_pipe, &opcode_disconnect, sizeof(char)) != 1) {
+    debug("return -1\n");
+    return -1; 
+  }
+  debug("opcode disconect: %d\n", opcode_disconnect);
   /*------ FECHA OS PIPES DA SESSÃO ------*/
   close(session.req_pipe);
   close(session.notif_pipe);
+  debug("fechei pipes disconect");
 
   /*----- REMOVE OS PIPES DA SESSÃO -----*/
   unlink(session.req_pipe_path);
   unlink(session.notif_pipe_path);
-  
+  debug("unlink pipes disconect");
+
   /*------ REEINICIAR A SESSÃO -------*/
   session.req_pipe = -1;
   session.notif_pipe = -1;
@@ -109,7 +117,8 @@ int pacman_disconnect() {
 Board receive_board_update(void) {
   char opcode;
   size_t bytes_read;
-  bytes_read = read(session.notif_pipe, &opcode, sizeof(char));    
+  bytes_read = read(session.notif_pipe, &opcode, sizeof(char));
+  debug("opcode: %d\n", opcode);  
   if(bytes_read <= 0) {
     debug("Erro ao ler opcode 4\n");
     board.game_over = 1;
@@ -133,6 +142,6 @@ Board receive_board_update(void) {
     board.game_over = 1;
     return board;
   }
-
+  
   return board;
 }

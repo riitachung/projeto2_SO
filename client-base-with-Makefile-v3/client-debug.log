@@ -2,29 +2,22 @@ Cliente pede login
 Cliente conectado
 receiver_thread iniciada
 receiver_thread:
-VICTORY: 0, GAME_OVER: 0
-Command: D
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-Command: D
-VICTORY: 0, GAME_OVER: 0
-Command: D
-VICTORY: 1, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 1, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-Command: D
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
-VICTORY: 0, GAME_OVER: 0
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+Command: S
+opcode: 4
+Command: S
+opcode: 4
+!board.data || board.game_over == 1
+Returning receiver thread...
+Command: S
