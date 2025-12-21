@@ -313,6 +313,7 @@ void* session_thread (void* arg) {
    
    // AGORA SIM, FAZER UNLOAD DO ÚLTIMO NÍVEL
    unload_level(&args->board);
+
    debug("unload do último nível feito\n");
    close(args->req_pipe);
    close(args->notif_pipe);

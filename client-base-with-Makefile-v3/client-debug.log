@@ -14,10 +14,28 @@ opcode: 4
 opcode: 4
 opcode: 4
 opcode: 4
+opcode: 4
+opcode: 4
+opcode: 4
+Command: D
+opcode: 4
+Command: D
+opcode: 4
+opcode: 4
+opcode: 4
 Command: S
 opcode: 4
 Command: S
+Command: S
+opcode: 4
+Command: A
+opcode: 4
+Command: A
+opcode: 4
 opcode: 4
 !board.data || board.game_over == 1
 Returning receiver thread...
-Command: S
+Stop execution
+Receiver thread terminada
+Pacman desconectado
+refresh do screen e terminal cleanup
