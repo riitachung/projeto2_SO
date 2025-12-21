@@ -134,7 +134,7 @@ void* ghost_thread(void *arg) {
    ghost_t* ghost = &board->ghosts[ghost_ind];
 
    while (1) {
-      sleep_ms(board->tempo * (1 + ghost->passo));
+      sleep_ms(board->tempo);
 
       pthread_rwlock_rdlock(&victory_lock);
       int current_game_over = game_over;
