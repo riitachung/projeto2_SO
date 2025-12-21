@@ -2,12 +2,13 @@ Cliente pede login
 Cliente conectado
 receiver_thread iniciada
 receiver_thread:
-Command: D
-Command: D
-Command: D
+Erro ao ler opcode 4
 !board.data || board.game_over == 1
 Returning receiver thread...
 Stop execution
 Receiver thread terminada
+Pacman desconectado
+refresh do screen e terminal cleanup
+erminada
 Pacman desconectado
 refresh do screen e terminal cleanup
