@@ -118,7 +118,6 @@ Board receive_board_update(void) {
   char opcode;
   size_t bytes_read;
   bytes_read = read(session.notif_pipe, &opcode, sizeof(char));
-  debug("opcode: %d\n", opcode);  
   if(bytes_read <= 0) {
     debug("Erro ao ler opcode 4\n");
     board.game_over = 1;

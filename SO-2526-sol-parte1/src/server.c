@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <semaphore.h>
+#include <signal.h>
 
 #define MAX_BUFFER_SIZE 1
 
@@ -256,12 +257,12 @@ void* session_thread (void* arg) {
             continue; 
          }
 
-         if(current_game_over == 1 && current_victory == 0) {
+         /*if(current_game_over == 1 && current_victory == 0) {
             //free(data);
             pthread_rwlock_unlock(&session->board.state_lock);
             debug("game_over detetado antes de write, a terminar sessão\n");
             break;
-         }
+         }*/
 
          // ESCREVE NO PIPE DAS NOTIFICAÇÕES A INFORMAÇÃO PARA CONSTRUIR TABULEIRO
          write(notif_fd, &opcode, sizeof(char));
@@ -431,6 +432,7 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
    
    open_debug_file("server-debug.log");
    debug("Servidor iniciado\n");
+   signal(SIGPIPE, SIG_IGN);
 
    pthread_mutex_init(&buffer_mutex, NULL);
    sem_init(&empty_buffer, 0, MAX_BUFFER_SIZE);

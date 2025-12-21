@@ -2,39 +2,12 @@ Cliente pede login
 Cliente conectado
 receiver_thread iniciada
 receiver_thread:
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-1
-2
-opcode disconect: 2
-fechei pipes disconectunlink pipes disconectClient pressed 'Q', quitting gamopcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-opcode: 4
-1
-2
-opcode disconect: 2
-fechei pipes disconectunlink pipes disconectClient pressed 'Q', quitting game
-opcode: 0
+Command: D
+Command: D
+Command: D
 !board.data || board.game_over == 1
 Returning receiver thread...
+Stop execution
 Receiver thread terminada
 Pacman desconectado
 refresh do screen e terminal cleanup
