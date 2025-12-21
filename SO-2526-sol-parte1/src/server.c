@@ -157,8 +157,9 @@ void* ghost_thread(void *arg) {
          pthread_exit(NULL);
       }
 
-      pthread_rwlock_rdlock(&board->state_lock);
-      move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
+      pthread_rwlock_wrlock(&board->state_lock);
+      if(ghost->n_moves > 0)
+         move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
       pthread_rwlock_unlock(&board->state_lock);
    }
 }
@@ -238,7 +239,7 @@ void* session_thread (void* arg) {
          
          pthread_rwlock_rdlock(&session->board.state_lock);
          temp = session->board;   // cópia da struct
-         pthread_rwlock_unlock(&session->board.state_lock);
+
          
          pthread_rwlock_rdlock(&session->victory_lock);
          int current_victory = session->victory;
@@ -249,9 +250,17 @@ void* session_thread (void* arg) {
 
          // se o board ainda não foi inicializado no load_level, não escrever nada
          if (temp.width == 0 && temp.height == 0 && temp.board == NULL) {
+            pthread_rwlock_unlock(&session->board.state_lock);
             debug("Board ainda nao disponível\n");
             sleep_ms(10);
             continue; 
+         }
+
+         if(current_game_over == 1 && current_victory == 0) {
+            //free(data);
+            pthread_rwlock_unlock(&session->board.state_lock);
+            debug("game_over detetado antes de write, a terminar sessão\n");
+            break;
          }
 
          // ESCREVE NO PIPE DAS NOTIFICAÇÕES A INFORMAÇÃO PARA CONSTRUIR TABULEIRO
@@ -285,14 +294,18 @@ void* session_thread (void* arg) {
             data[idx] = 'C';
          }
 
+         pthread_rwlock_unlock(&session->board.state_lock);  
+
          write(notif_fd, data, (temp.width * temp.height));
          free(data);
          
+         
          // VERIFICA SE DEVE SAIR (APÓS ENVIAR O BOARD)
-         if (/*(current_victory == 1 && */current_game_over == 1) {
+         if (current_game_over == 1) {
             debug("O jogo terminou completamente\n");
             break;
          }  
+         
 
          // no caso de vitória (reached_portal)
          if(current_victory) {
@@ -369,11 +382,8 @@ void* session_thread (void* arg) {
 
 }
 
-/*THREAD ANFITRIÂ*/
-/*
-lê o fifo de registo
-ve se opcode = 1
-coloca pedido no buffer*/
+
+
 void* host_thread (void* arg) {
    debug("CHEGUEIIIIII A THREADJIIIII HOSTJIIII\n");
    int server_fd = *(int*) arg; 
@@ -407,8 +417,6 @@ void* host_thread (void* arg) {
    }
    return NULL;
 }
-
-
 
 
 int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIFO_de_registo

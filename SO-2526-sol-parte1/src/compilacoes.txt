@@ -8,7 +8,7 @@ vitoria:
 cd client-base-with-Makefile-v3/
 make clean
 make
-./bin/client 1 /tmp/server_reg
+./bin/client 3 /tmp/server_reg
 
 ----- compilação servidor -----
 cd SO-2526-sol-parte1/src
