@@ -193,8 +193,10 @@ void* ghost_thread(void *arg) {
    int ghost_ind = arg_ghost->ghost_index;
    int result;
 
-   free(arg_ghost);
    ghost_t* ghost = &board->ghosts[ghost_ind];
+   debug("Ghost thread %d: começou (antes do free arg)\n", ghost_ind);
+   free(arg_ghost);
+   debug("Ghost thread %d: depois do free arg\n", ghost_ind);
 
    while (1) {
       sleep_ms(board->tempo);
@@ -206,24 +208,32 @@ void* ghost_thread(void *arg) {
       
 
       if(current_game_over || current_victory) {                        // termina a thread se o jogo terminou
-         debug("game_over detetado -> acaba a ghost thread\n");
+         debug("Ghost thread %d: game_over detetado -> acaba a ghost thread\n", ghost_ind);
          pthread_exit(NULL);
       }
 
+      debug("Ghost thread %d: antes de wrlock state_lock\n", ghost_ind);
       pthread_rwlock_wrlock(&board->state_lock);
+      debug("Ghost thread %d: obteve wrlock state_lock\n", ghost_ind);
       if(ghost->n_moves > 0)  {                                          // move o monstro
          result =move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
        // PACMAN MORTO
          if(result == DEAD_PACMAN) {
-            debug("DEAD_PACMAN -> QUIT_GAME\n");
+            debug("Ghost thread %d: DEAD_PACMAN -> QUIT_GAME\n", ghost_ind);
             pthread_rwlock_wrlock(&args->victory_lock);
             args->game_over = 1;
             pthread_rwlock_unlock(&args->victory_lock);
+            debug("Ghost thread %d: antes de unlock state_lock\n", ghost_ind);
             pthread_rwlock_unlock(&board->state_lock);
+            debug("Ghost thread %d: vai fazer pthread_exit\n", ghost_ind);
+            pthread_exit(NULL);
          }
       }
+      debug("Ghost thread %d: vai desbloquear state_lock no fim do while\n", ghost_ind);
       pthread_rwlock_unlock(&board->state_lock);
+      debug("Ghost thread %d: desbloqueou state_lock, volta ao while\n", ghost_ind);
    }
+   debug("Ghost thread %d: saiu do while (nunca devia chegar aqui)\n", ghost_ind);
    return NULL;
 }
 
@@ -376,6 +386,8 @@ void* session_thread (void* arg) {
          for (int i = 0; i < temp.width * temp.height; i++) {
             if(temp.board[i].content == 'M'){
                data[i] = 'M';
+            } else if(temp.board[i].content == 'P'){
+               data[i] = 'C';
             } else if (temp.board[i].content == 'W') {
                data[i] = '#';
             } else {
@@ -386,12 +398,14 @@ void* session_thread (void* arg) {
                else data[i] = ' ';
             }
          }
+         /*
          int x = temp.pacmans[0].pos_x;
          int y = temp.pacmans[0].pos_y;
          int idx = y * temp.width + x;
          if (idx >= 0 && idx < temp.width * temp.height) {
             data[idx] = 'C';
          }
+            */
 
          pthread_rwlock_unlock(&session->board.state_lock);  
 
@@ -441,6 +455,7 @@ void* session_thread (void* arg) {
                   arg_ghost->ghost_index = i;
                   pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
                }
+               threads_running = 1;
             } else {
                // último nível completo
                pthread_rwlock_wrlock(&session->victory_lock);
@@ -455,22 +470,33 @@ void* session_thread (void* arg) {
       
       // ESPERA PELAS THREADS
       if(threads_running){
+         debug("Cliente %d: vai fazer join da pacman thread\n", session->client_id);
          pthread_join(pacman_tid, NULL);
+         debug("Cliente %d: pacman thread terminada, vai fazer join de %d ghost threads\n", session->client_id, n_ghosts);
          for(int i = 0; i < n_ghosts; i++) {
+            debug("Cliente %d: fazendo join da ghost thread %d\n", session->client_id, i);
             pthread_join(ghost_tids[i], NULL);
+            debug("Cliente %d: ghost thread %d terminada\n", session->client_id, i);
          }
-         debug("threads terminadas\n");
+         debug("Cliente %d: todas as threads terminadas\n", session->client_id);
          free(ghost_tids);
       }
       
       // FAZER UNLOAD DO ÚLTIMO NÍVEL
+      debug("Cliente %d: vai fazer unload do último nível\n", session->client_id);
       unload_level(&session->board);
-      debug("unload do último nível feito\n");
+      debug("Cliente %d: unload do último nível feito\n", session->client_id);
+      debug("Cliente %d: vai fechar pipes\n", session->client_id);
       close(session->req_pipe);
       close(session->notif_pipe);
+      debug("Cliente %d: vai destruir victory_lock\n", session->client_id);
       pthread_rwlock_destroy(&session->victory_lock);
+      debug("Cliente %d: vai desativar cliente no array\n", session->client_id);
       clients[session->client_index].active = 0;
+      debug("Cliente %d: vai fazer free da session\n", session->client_id);
       free(session);
+      debug("session_thread completamente terminada\n");
+      
    }
    return NULL;
 }

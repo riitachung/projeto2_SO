@@ -14,7 +14,34 @@ make
 cd SO-2526-sol-parte1/src
 gcc server.c board.c parser.c display.c -o PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw
 
+----- siganls -----
+pidof Pacmanist
+kill -SIGUSR1 <pid>
 
 
--> o mosntro nao esta a aparecer logo no inicio do jogo
--> os pontos do pacman no final passam se (esta a ler lixo)
+------ sigma ------
+1. criar um zip do projeto --> projeto2_SO.zip
+2. no terminal, escrever
+    scp projeto2_SO.zip istXXXXXX@sigma.ist.utl.pt:~
+3. no terminal, escrever
+    ssh istXXXXXX@sigma.ist.utl.pt
+4. unzip do ficheiro
+    unzip projeto2_SO.zip
+5. entrar dentro do ficheiro e testar (sem diretorias absolutas, o levels nao precisa de todo o path, so o nome da pasta)
+    no servidor:
+    ./bin/Pacmanist levels {max_games} /tmp/server_reg
+    no cliente:
+    ./bin/client {id} /tmp/server_reg
+
+
+Nota: para funcionar, o sigam precisa de ser o mesmo em todos os terminais.
+por exemplo, se aparecer:
+
+terminal 1:
+ist1114055@sigma01:
+
+terminal 2:
+ist1114055@sigma02:
+
+
+não pode ser, o número no final tem de ser igual em todos os terminais.

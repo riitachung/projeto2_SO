@@ -3,7 +3,7 @@ DIM 8 4
 # TEMPO: tempo por jogada
 TEMPO 200
 # PAC p1.p
-MON m3.m m2.m m1.m
+MON m1.m
 XXXXXXXX
 XXXXoo@X
 XooooooX
