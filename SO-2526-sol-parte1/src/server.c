@@ -13,7 +13,6 @@
 #define MAX_BUFFER_SIZE 10
 #define MAX_CLIENTS 100
 
-
 /*--------- ESTRUTURAS -----------*/
 
 typedef struct SessionArguments {                  // estrutura que guarda argumentos da sessão
@@ -64,6 +63,8 @@ int in = 0;                                        // indice de escrita (onde o 
 int out = 0;                                       // indice de leitura (onde o consumidor(session_thread) vai ler/ tirar)
 volatile sig_atomic_t sigusr_received = 0;          // flag para sinal SIGUSR1
 
+
+/*--------- FUNÇÃO AUXILIAR À ORDENAÇÃO POR PONTOS ----------*/
 int sort_clients(const void *a, const void *b) {
    client_game_t *clientA = (client_game_t *)a;
    client_game_t *clientB = (client_game_t *)b;
@@ -89,7 +90,9 @@ void generate_file() {
    for(int i = 0 ; i < active_count && i < 5; i++) {
       char client_buf[128];
       int len = snprintf(client_buf, sizeof(client_buf), "CLIENTE: %d PONTOS: %d\n", active_clients[i].id, active_clients[i].points);
-      write(top5_fd, client_buf, len);
+      if(write(top5_fd, client_buf, len) != len) {
+         break;
+      }
    }
    close(top5_fd);
 }
@@ -114,7 +117,7 @@ void* pacman_thread(void *arg) {
          char opcode;
          char command_client;
 
-         if(read(req_pipe, &opcode, sizeof(char)) <= 0) {            // Lê opcode de pedido de comando
+         if(read(req_pipe, &opcode, sizeof(char)) != 1) {            // Lê opcode de pedido de comando
             pthread_rwlock_wrlock(&args->victory_lock);
             args->game_over = 1;                                     // erro na leitura -> termina o jogo
             pthread_rwlock_unlock(&args->victory_lock);
@@ -129,7 +132,12 @@ void* pacman_thread(void *arg) {
          if(opcode != 3) {                                           // se não for pedido de comando recomeca while
             continue;
          }
-         read(req_pipe, &command_client, sizeof(char));              // se for pedido de comando lê o comando
+         if(read(req_pipe, &command_client, sizeof(char)) != 1) { // se for pedido de comando lê o comando
+            pthread_rwlock_wrlock(&args->victory_lock);
+            args->game_over = 1;                                     // erro na leitura -> termina o jogo
+            pthread_rwlock_unlock(&args->victory_lock);
+            break;
+         }             
          c.command = command_client;
          c.turns = 1;
          play = &c;
@@ -170,7 +178,6 @@ void* pacman_thread(void *arg) {
          pthread_rwlock_unlock(&board->state_lock);
          break;
       }
-
       pthread_rwlock_unlock(&board->state_lock);
    }
    debug("Pacman thread terminada\n");
@@ -184,6 +191,7 @@ void* ghost_thread(void *arg) {
    struct SessionArguments *args = arg_ghost->sessionArguments;
    board_t *board = &args->board;
    int ghost_ind = arg_ghost->ghost_index;
+   int result;
 
    free(arg_ghost);
    ghost_t* ghost = &board->ghosts[ghost_ind];
@@ -202,8 +210,17 @@ void* ghost_thread(void *arg) {
       }
 
       pthread_rwlock_wrlock(&board->state_lock);
-      if(ghost->n_moves > 0)                                            // move o monstro
-         move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
+      if(ghost->n_moves > 0)  {                                          // move o monstro
+         result =move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
+       // PACMAN MORTO
+         if(result == DEAD_PACMAN) {
+            debug("DEAD_PACMAN -> QUIT_GAME\n");
+            pthread_rwlock_wrlock(&args->victory_lock);
+            args->game_over = 1;
+            pthread_rwlock_unlock(&args->victory_lock);
+            pthread_rwlock_unlock(&board->state_lock);
+         }
+      }
       pthread_rwlock_unlock(&board->state_lock);
    }
 }
@@ -222,24 +239,33 @@ void* session_thread (void* arg) {
       pthread_mutex_unlock(&buffer_mutex);
       sem_post(&empty_buffer);
 
-
       int notif_fd, req_fd;
       char opcode = 1, result = 0;
 
       // OBTER O ID DO CLIENTE
       char* c = strrchr(request.req_pipe_path, '/');     // encontrar a última barra  de "/tmp/{id}_request" => c = /{id}_request
-      c ++;                                              // => c = {id}_request
+      c++;                                              // => c = {id}_request
       int client_id = atoi(c);                           // lê os números até encontrar algo que nãpo seja número
       
-      notif_fd = open(request.notif_pipe_path, O_WRONLY);                     
-      write(notif_fd, &opcode, sizeof(char));                           // envia o resultado do connect
-      write(notif_fd, &result, sizeof(char));
+      notif_fd = open(request.notif_pipe_path, O_WRONLY);
+      if(notif_fd < 0) continue;                     
+      if(write(notif_fd, &opcode, sizeof(char)) != 1||                            // envia o resultado do connect
+         write(notif_fd, &result, sizeof(char)) != 1) {
+         close(notif_fd);
+         continue;
+      }
       req_fd = open(request.req_pipe_path, O_RDONLY);
+      if(req_fd < 0) {
+         close(notif_fd);
+         continue;
+      }
 
       // define argumentos da sessão
       struct SessionArguments *session = malloc(sizeof(SessionArguments));
       if(!session)   {
          debug("Erro ao alocar memória para sessão\n");
+         close(notif_fd);
+         close(req_fd);
          continue;
       }
       session->req_pipe = req_fd;
@@ -248,14 +274,13 @@ void* session_thread (void* arg) {
       session->victory = 0;
       session->game_over = 0;
       session->client_id = client_id;
-      pthread_rwlock_init(&session->victory_lock, NULL);
       int current_level = 0;
       int accumulated_points = 0;
       int threads_running = 1;
+      pthread_rwlock_init(&session->victory_lock, NULL);
 
       // ADICIONA A INFO DE UM CLIENTE À LISTA DE CLIENTES
       pthread_mutex_lock(&clients_mutex);
-
       // Procurar uma posição livre no array
       int client_index = -1;
       for(int i = 0; i < MAX_CLIENTS; i++) {
@@ -278,7 +303,6 @@ void* session_thread (void* arg) {
       clients[client_index].active = 1;
       session->client_index = client_index;
       pthread_mutex_unlock(&clients_mutex);
-
 
       // LÊ DIRETORIA
       session->session_files = manage_files(levels_dir);
@@ -323,13 +347,17 @@ void* session_thread (void* arg) {
 
          // ESCREVE NO PIPE DAS NOTIFICAÇÕES A INFORMAÇÃO PARA CONSTRUIR TABULEIRO
          char opcode = 4;
-         write(notif_fd, &opcode, sizeof(char));
-         write(notif_fd, &temp.width, sizeof(int));
-         write(notif_fd, &temp.height, sizeof(int));
-         write(notif_fd, &temp.tempo, sizeof(int));
-         write(notif_fd, &current_victory, sizeof(int));                            
-         write(notif_fd, &current_game_over, sizeof(int));                          
-         write(notif_fd, &temp.pacmans[0].points, sizeof(int));  
+         if(write(notif_fd, &opcode, sizeof(char)) != 1 ||
+         write(notif_fd, &temp.width, sizeof(int)) != sizeof(int) ||
+         write(notif_fd, &temp.height, sizeof(int)) != sizeof(int) ||
+         write(notif_fd, &temp.tempo, sizeof(int)) != sizeof(int) ||
+         write(notif_fd, &current_victory, sizeof(int)) != sizeof(int) ||                            
+         write(notif_fd, &current_game_over, sizeof(int)) != sizeof(int) ||                         
+         write(notif_fd, &temp.pacmans[0].points, sizeof(int)) != sizeof(int)) {
+            pthread_rwlock_unlock(&session->board.state_lock);  
+            debug("Erro ao escrever no pipe de notificações (server)\n");
+            break;
+         }
          
          // ATUALIZAÇÃO PONTUACAO DO CLIENTE CONSTANTE
          pthread_mutex_lock(&clients_mutex);
@@ -337,6 +365,11 @@ void* session_thread (void* arg) {
          pthread_mutex_unlock(&clients_mutex);
          
          char *data = malloc(temp.width * temp.height);
+         if(!data){
+            pthread_rwlock_unlock(&session->board.state_lock);  
+            debug("Erro ao alocar memória para data do board\n");
+            break;
+         }
 
          for (int i = 0; i < temp.width * temp.height; i++) {
             if(temp.board[i].content == 'M'){
@@ -360,7 +393,11 @@ void* session_thread (void* arg) {
 
          pthread_rwlock_unlock(&session->board.state_lock);  
 
-         write(notif_fd, data, (temp.width * temp.height));
+         if(write(notif_fd, data, (temp.width * temp.height)) != (temp.width * temp.height)) {
+            debug("Erro data\n");
+            free(data);
+            break;
+         }
          free(data);
          
          // VERIFICA SE DEVE SAIR (APÓS ENVIAR O BOARD)
@@ -445,7 +482,7 @@ void* host_thread (void* arg) {
    sigaddset(&set, SIGUSR1);
    pthread_sigmask(SIG_UNBLOCK, &set, NULL); // desbloqueia sinais sigusr1 nesta thread
    int server_fd = *(int*) arg; 
-    char opcode, req_pipe_path[40], notif_pipe_path[40];
+   char opcode, req_pipe_path[40], notif_pipe_path[40];
     
     // LÊ FIFO DE REGISTO CONSTANTEMENTE
     while(1){
@@ -456,7 +493,7 @@ void* host_thread (void* arg) {
          generate_file();
       }
 
-      if(read(server_fd, &opcode, sizeof(char)) <= 0) continue;      // se opcode <= 0 erro na leitura, recomeça o ciclo
+      if(read(server_fd, &opcode, sizeof(char)) != 1) continue;      // se opcode <= 0 erro na leitura, recomeça o ciclo
       if(opcode != 1) continue;                                      // se não for pedido de inicio de sessao recomeça o ciclo
       // se opcode == 1, lê os nomes dos pipes associados ao cliente
       if(read(server_fd, req_pipe_path, sizeof(req_pipe_path)) != 40) continue;

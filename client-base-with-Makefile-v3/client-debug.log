@@ -1,18 +1,1 @@
 Cliente pede login
-Cliente conectado
-receiver_thread iniciada
-receiver_thread:
-1
-2
-opcode disconect: 2
-fechei pipes disconectunlink pipes disconectClient pressed 'Q', quitting game
-!board.data || board.game_over == 1
-Returning receiver thread...
-Receiver thread terminada
-Pacman desconectado
-refresh do screen e terminal cleanup
-en e terminal cleanup
-al cleanup
-er thread terminada
-Pacman desconectado
-refresh do screen e terminal cleanup
