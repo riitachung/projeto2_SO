@@ -52,6 +52,8 @@ typedef struct {
 } client_game_t;
 
 
+
+
 /*--------- VARIÁVEIS GLOBAIS DO BUFFER ----------*/
 session_request_t buffer[MAX_BUFFER_SIZE];
 client_game_t clients[MAX_CLIENTS];
@@ -64,12 +66,15 @@ int out = 0;                                       // indice de leitura (onde o 
 volatile sig_atomic_t sigusr_received = 0;          // flag para sinal SIGUSR1
 
 
+
+
 /*--------- FUNÇÃO AUXILIAR À ORDENAÇÃO POR PONTOS ----------*/
 int sort_clients(const void *a, const void *b) {
-   client_game_t *clientA = (client_game_t *)a;
-   client_game_t *clientB = (client_game_t *)b;
-   return clientB->points - clientA->points; // ordem decrescente
+   client_game_t *client_a = (client_game_t *)a;
+   client_game_t *client_b = (client_game_t *)b;
+   return client_b->points - client_a->points; // ordem decrescente
 }
+
 
 /*--------- FUNÇÃO QUE GERA O FICHEIRO TOP 5 ---------*/
 void generate_file() {
@@ -94,6 +99,7 @@ void generate_file() {
          break;
       }
    }
+   debug("Criado ficheiro top5\n");
    close(top5_fd);
 }
 
@@ -186,7 +192,6 @@ void* pacman_thread(void *arg) {
 
 /*---------- THREAD DO MONSTRO -----------*/
 void* ghost_thread(void *arg) {
-   debug("começou ghost thread\n");
    ghost_thread_arg_t *arg_ghost = arg;
    struct SessionArguments *args = arg_ghost->sessionArguments;
    board_t *board = &args->board;
@@ -194,9 +199,8 @@ void* ghost_thread(void *arg) {
    int result;
 
    ghost_t* ghost = &board->ghosts[ghost_ind];
-   debug("Ghost thread %d: começou (antes do free arg)\n", ghost_ind);
+   debug("Ghost thread %d começou\n", ghost_ind);
    free(arg_ghost);
-   debug("Ghost thread %d: depois do free arg\n", ghost_ind);
 
    while (1) {
       sleep_ms(board->tempo);
@@ -212,28 +216,23 @@ void* ghost_thread(void *arg) {
          pthread_exit(NULL);
       }
 
-      debug("Ghost thread %d: antes de wrlock state_lock\n", ghost_ind);
       pthread_rwlock_wrlock(&board->state_lock);
-      debug("Ghost thread %d: obteve wrlock state_lock\n", ghost_ind);
       if(ghost->n_moves > 0)  {                                          // move o monstro
          result =move_ghost(board, ghost_ind, &ghost->moves[ghost->current_move%ghost->n_moves]);
-       // PACMAN MORTO
+         debug("Ghost thread %d: move_ghost\n", ghost_ind);
+
+         // PACMAN MORTO
          if(result == DEAD_PACMAN) {
             debug("Ghost thread %d: DEAD_PACMAN -> QUIT_GAME\n", ghost_ind);
             pthread_rwlock_wrlock(&args->victory_lock);
             args->game_over = 1;
             pthread_rwlock_unlock(&args->victory_lock);
-            debug("Ghost thread %d: antes de unlock state_lock\n", ghost_ind);
             pthread_rwlock_unlock(&board->state_lock);
-            debug("Ghost thread %d: vai fazer pthread_exit\n", ghost_ind);
             pthread_exit(NULL);
          }
       }
-      debug("Ghost thread %d: vai desbloquear state_lock no fim do while\n", ghost_ind);
       pthread_rwlock_unlock(&board->state_lock);
-      debug("Ghost thread %d: desbloqueou state_lock, volta ao while\n", ghost_ind);
    }
-   debug("Ghost thread %d: saiu do while (nunca devia chegar aqui)\n", ghost_ind);
    return NULL;
 }
 
@@ -398,14 +397,6 @@ void* session_thread (void* arg) {
                else data[i] = ' ';
             }
          }
-         /*
-         int x = temp.pacmans[0].pos_x;
-         int y = temp.pacmans[0].pos_y;
-         int idx = y * temp.width + x;
-         if (idx >= 0 && idx < temp.width * temp.height) {
-            data[idx] = 'C';
-         }
-            */
 
          pthread_rwlock_unlock(&session->board.state_lock);  
 
@@ -470,30 +461,21 @@ void* session_thread (void* arg) {
       
       // ESPERA PELAS THREADS
       if(threads_running){
-         debug("Cliente %d: vai fazer join da pacman thread\n", session->client_id);
          pthread_join(pacman_tid, NULL);
-         debug("Cliente %d: pacman thread terminada, vai fazer join de %d ghost threads\n", session->client_id, n_ghosts);
          for(int i = 0; i < n_ghosts; i++) {
-            debug("Cliente %d: fazendo join da ghost thread %d\n", session->client_id, i);
             pthread_join(ghost_tids[i], NULL);
-            debug("Cliente %d: ghost thread %d terminada\n", session->client_id, i);
          }
          debug("Cliente %d: todas as threads terminadas\n", session->client_id);
          free(ghost_tids);
       }
       
       // FAZER UNLOAD DO ÚLTIMO NÍVEL
-      debug("Cliente %d: vai fazer unload do último nível\n", session->client_id);
       unload_level(&session->board);
       debug("Cliente %d: unload do último nível feito\n", session->client_id);
-      debug("Cliente %d: vai fechar pipes\n", session->client_id);
       close(session->req_pipe);
       close(session->notif_pipe);
-      debug("Cliente %d: vai destruir victory_lock\n", session->client_id);
       pthread_rwlock_destroy(&session->victory_lock);
-      debug("Cliente %d: vai desativar cliente no array\n", session->client_id);
       clients[session->client_index].active = 0;
-      debug("Cliente %d: vai fazer free da session\n", session->client_id);
       free(session);
       debug("session_thread completamente terminada\n");
       
@@ -503,7 +485,7 @@ void* session_thread (void* arg) {
 
 /*--------- THREAD ANFITRIÃ ----------*/
 void* host_thread (void* arg) {
-   debug("começou host thread\n");
+   debug("Começou host thread\n");
 
    sigset_t set;
    sigemptyset(&set);
