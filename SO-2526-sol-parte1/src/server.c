@@ -206,11 +206,11 @@ void* ghost_thread(void *arg) {
       pthread_rwlock_unlock(&args->victory_lock);
       
       if(stop) break;
-
+/*
       if(current_game_over || current_victory) {                        // termina a thread se o jogo terminou
          debug("game_over detetado -> acaba a ghost thread\n");
          pthread_exit(NULL);
-      }
+      }*/
 
       pthread_rwlock_wrlock(&board->state_lock);
       if(ghost->n_moves > 0)  {                                          // move o monstro
