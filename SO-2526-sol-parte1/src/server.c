@@ -11,6 +11,8 @@
 #include <signal.h>
 
 #define MAX_BUFFER_SIZE 10
+#define MAX_CLIENTS 100
+
 
 /*--------- ESTRUTURAS -----------*/
 
@@ -43,19 +45,62 @@ typedef struct {                                   // estrutura para guardar ped
    char notif_pipe_path[40];
 } session_request_t;
 
+typedef struct {
+   int id;
+   int points;
+   int active;
+} client_game_t;
+
+
 /*--------- VARIÁVEIS GLOBAIS DO BUFFER ----------*/
 session_request_t buffer[MAX_BUFFER_SIZE];
+client_game_t clients[MAX_CLIENTS];
 pthread_mutex_t buffer_mutex;
+pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 sem_t empty_buffer;                                // semáforo que conta espaços vazios no buffer
 sem_t full_buffer;                                 // semáforo que conta pedidos disponíveis
 int in = 0;                                        // indice de escrita (onde o produtor(host_thread) vai escrever/ colocar)
 int out = 0;                                       // indice de leitura (onde o consumidor(session_thread) vai ler/ tirar)
+volatile sig_atomic_t sigusr_received = 0;          // flag para sinal SIGUSR1
+int next_client = 1;
+
+int sort_clients(const void *a, const void *b) {
+   client_game_t *clientA = (client_game_t *)a;
+   client_game_t *clientB = (client_game_t *)b;
+   return clientB->points - clientA->points; // ordem decrescente
+}
+
+/*--------- FUNÇÃO QUE GERA O FICHEIRO TOP 5 ---------*/
+void generate_file() {
+   int top5_fd = open("top5_clients.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);   // cria, se existir apaga conteúdo antigo
+   if(top5_fd < 0) return;
+
+   client_game_t active_clients[MAX_CLIENTS];
+   int active_count = 0;
+
+   pthread_mutex_lock(&clients_mutex);
+   for(int i = 0; i < MAX_CLIENTS; i++){
+      if(clients[i].active) {
+         active_clients[active_count++] = clients[i];
+      }
+   }
+   pthread_mutex_unlock(&clients_mutex);
+   qsort(active_clients, active_count, sizeof(client_game_t), sort_clients);
+   for(int i = 0 ; i < active_count && i < 5; i++) {
+      char client_buf[128];
+      int len = snprintf(client_buf, sizeof(client_buf), "CLIENTE: %d PONTOS: %d\n", active_clients[i].id, active_clients[i].points);
+      write(top5_fd, client_buf, len);
+   }
+   close(top5_fd);
+}
+
 
 /*--------- THREAD DO PACMAN -----------*/
 void* pacman_thread(void *arg) {
    struct SessionArguments *args = arg;           
    board_t *board = &args->board;
    int req_pipe = args->req_pipe;                  // pipe que recebe pedidos de movimentos do cliente
+   
    pacman_t* pacman = &board->pacmans[0];
    
    while (1) {
@@ -187,6 +232,10 @@ void* session_thread (void* arg) {
 
       // define argumentos da sessão
       struct SessionArguments *session = malloc(sizeof(SessionArguments));
+      if(!session)   {
+         debug("Erro ao alocar memória para sessão\n");
+         continue;
+      }
       session->req_pipe = req_fd;
       session->notif_pipe = notif_fd;
       session->levels_dir = levels_dir;
@@ -196,6 +245,22 @@ void* session_thread (void* arg) {
       int current_level = 0;
       int accumulated_points = 0;
       int threads_running = 1;
+
+      // ADICIONA A INFO DE UM CLIENTE À LISTA DE CLIENTES
+      pthread_mutex_lock(&clients_mutex);
+      if(session->client_id >= MAX_CLIENTS){
+         debug("Número máximo de clientes atingido\n");
+         close(session->req_pipe);
+         close(session->notif_pipe);
+         free(session);
+         continue;
+      }
+      session->client_id = next_client++;
+      clients[session->client_id].id = session->client_id;
+      clients[session->client_id].points = 0;
+      clients[session->client_id].active = 1;
+      pthread_mutex_unlock(&clients_mutex);
+
 
       // LÊ DIRETORIA
       session->session_files = manage_files(levels_dir);
@@ -247,6 +312,11 @@ void* session_thread (void* arg) {
          write(notif_fd, &current_victory, sizeof(int));                            
          write(notif_fd, &current_game_over, sizeof(int));                          
          write(notif_fd, &temp.pacmans[0].points, sizeof(int));  
+         
+         // ATUALIZAÇÃO PONTUACAO DO CLIENTE CONSTANTE
+         pthread_mutex_lock(&clients_mutex);
+         clients[session->client_id].points = temp.pacmans[0].points;
+         pthread_mutex_unlock(&clients_mutex);
          
          char *data = malloc(temp.width * temp.height);
 
@@ -342,20 +412,32 @@ void* session_thread (void* arg) {
       close(session->req_pipe);
       close(session->notif_pipe);
       pthread_rwlock_destroy(&session->victory_lock);
+      clients[session->client_id].active = 0;
       free(session);
    }
    return NULL;
 }
 
-
 /*--------- THREAD ANFITRIÃ ----------*/
 void* host_thread (void* arg) {
    debug("começou host thread\n");
+
+   sigset_t set;
+   sigemptyset(&set);
+   sigaddset(&set, SIGUSR1);
+   pthread_sigmask(SIG_UNBLOCK, &set, NULL); // desbloqueia sinais sigusr1 nesta thread
    int server_fd = *(int*) arg; 
     char opcode, req_pipe_path[40], notif_pipe_path[40];
     
     // LÊ FIFO DE REGISTO CONSTANTEMENTE
     while(1){
+
+      if(sigusr_received) {
+         sigusr_received = 0;
+         debug("Sinal recebido, gerando ficheiro\n");
+         generate_file();
+      }
+
       if(read(server_fd, &opcode, sizeof(char)) <= 0) continue;      // se opcode <= 0 erro na leitura, recomeça o ciclo
       if(opcode != 1) continue;                                      // se não for pedido de inicio de sessao recomeça o ciclo
       // se opcode == 1, lê os nomes dos pipes associados ao cliente
@@ -380,6 +462,11 @@ void* host_thread (void* arg) {
    return NULL;
 }
 
+void signal_handler(int sigusr) {
+   (void)sigusr;
+   sigusr_received = 1;
+}
+
 
 int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIFO_de_registo
    // verificar e receber argumentos
@@ -390,9 +477,14 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
 
    int server_fd;
    unlink(server_pipe_path);
-   
    open_debug_file("server-debug.log");
+   
    signal(SIGPIPE, SIG_IGN);                                // evita erro SIGPIPE
+   struct sigaction sa; 
+   sa.sa_handler = signal_handler;
+   sigemptyset(&sa.sa_mask); 
+   sa.sa_flags = 0; 
+   sigaction(SIGUSR1, &sa, NULL);
 
    pthread_mutex_init(&buffer_mutex, NULL);                 // inicia mutexs e semaforos
    sem_init(&empty_buffer, 0, MAX_BUFFER_SIZE);
@@ -400,9 +492,14 @@ int main(int argc, char *argv[]) { // PacmanIST levels_dir max_games nome_do_FIF
 
    // CRIA E ABRE O FIFO DO SERVIDOR
    if(mkfifo(server_pipe_path, 0666) < 0) return -1;
-   debug("CRIEI O FIFINHO MAIN\n");
    server_fd = open(server_pipe_path, O_RDWR);
    if(server_fd < 0) return -1;
+
+   // BLOQUEIO DO SIGUSR PARA AS THREADS DO CLIENTE
+   sigset_t set;              // declara o conjunto de sinais
+   sigemptyset(&set);         // si
+   sigaddset(&set, SIGUSR1); // adiciona o sinal SIGUSR1 ao conjunto
+   pthread_sigmask(SIG_BLOCK, &set, NULL); // bloqueia sinais nas threads filhas
 
    // CRIA THREAD ANFITRIÃ E THREADS DE SESSÃO
    pthread_t tid_host;

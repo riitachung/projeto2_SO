@@ -8,6 +8,7 @@ enum {
   OP_CODE_DISCONNECT = 2,
   OP_CODE_PLAY = 3,
   OP_CODE_BOARD = 4,
+  //OP_CODE_PACMAN_FILE = 5,
 };
 
 #endif

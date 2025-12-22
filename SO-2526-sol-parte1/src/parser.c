@@ -133,6 +133,8 @@ int read_level(board_t* board, char* filename, char* dirname) {
     return 0;
 }
 
+
+
 int read_pacman(board_t* board, int points) {
     pacman_t* pacman = &board->pacmans[0];
     pacman->alive = 1;
@@ -236,7 +238,6 @@ int read_pacman(board_t* board, int points) {
     close(fd);
     return 0;
 }
-
 
 int read_ghosts(board_t* board) {
     for (int i = 0; i < board->n_ghosts; i++) {
@@ -373,12 +374,13 @@ files_t manage_files(const char *path){
                 snprintf(files.ghost_files[files.ghost_count], MAX_FILENAME, "%s", filename);
                 files.ghost_count++;
             }
-            
+            /*
             // guarda na struct files.pacman_files os nomes dos ficheiros dos pacmans com o path todo ==> files.level_files[] = ["path/.../p1.p", "path/.../p2.p", ...]
             else if (strcmp(filename + (len - 2), ".p") == 0){
                 snprintf(files.pacman_files[files.pacman_count], MAX_FILENAME, "%s", filename);
                 files.pacman_count++;
             } 
+            */
         }
     }
     closedir(directory_path); 

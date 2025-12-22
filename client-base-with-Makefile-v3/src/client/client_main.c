@@ -12,6 +12,8 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#define MAX_COMMAND_LENGTH 256
+
 Board board = {0};
 bool stop_execution = false;
 int tempo;
@@ -46,6 +48,7 @@ static void *receiver_thread(void *arg) {
     return NULL;
 }
 
+
 int main(int argc, char *argv[]) {
 
     if (argc != 3 && argc != 4) {
@@ -58,6 +61,7 @@ int main(int argc, char *argv[]) {
     const char *client_id = argv[1];
     const char *register_pipe = argv[2];
     const char *commands_file = (argc == 4) ? argv[3] : NULL;
+
 
     FILE *cmd_fp = NULL;
     if (commands_file) {
@@ -101,15 +105,16 @@ int main(int argc, char *argv[]) {
 
     while (1) {
 
-        pthread_mutex_lock(&mutex);
-        if (stop_execution) {
-            debug("Stop execution\n");
-            pthread_mutex_unlock(&mutex);
-            break;
-        }       //TO-DO VER 
-        pthread_mutex_unlock(&mutex);
-
         if (cmd_fp) {
+
+            pthread_mutex_lock(&mutex);
+            if (stop_execution) {
+                debug("Stop execution\n");
+                pthread_mutex_unlock(&mutex);
+                break;
+            }       //TO-DO VER 
+            pthread_mutex_unlock(&mutex);
+
             // Input from file
             ch = fgetc(cmd_fp);
 
@@ -130,12 +135,31 @@ int main(int argc, char *argv[]) {
             pthread_mutex_lock(&mutex);
             int wait_for = tempo;
             pthread_mutex_unlock(&mutex);
+            
+            // Garantir um delay mínimo mesmo se tempo for 0
+            if (wait_for <= 0) wait_for = 100; 
 
             sleep_ms(wait_for);
+            pthread_mutex_lock(&mutex);
+            if (stop_execution) {
+                debug("Stop execution after sleep\n");
+                pthread_mutex_unlock(&mutex);
+                break;
+            }
+            pthread_mutex_unlock(&mutex);
             
         } else {
             // Interactive input
             command = get_input();
+            
+            pthread_mutex_lock(&mutex);
+            if (stop_execution) {
+                debug("Stop execution\n");
+                pthread_mutex_unlock(&mutex);
+                break;
+            }       //TO-DO VER 
+            pthread_mutex_unlock(&mutex);
+
             command = toupper(command);
         }
 
@@ -149,8 +173,6 @@ int main(int argc, char *argv[]) {
         }
 
         debug("Command: %c\n", command);
-
-        pthread_mutex_unlock(&mutex);
 
         pacman_play(command);
 
