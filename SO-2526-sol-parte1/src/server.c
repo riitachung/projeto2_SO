@@ -18,6 +18,7 @@
 
 typedef struct SessionArguments {                  // estrutura que guarda argumentos da sessão
    int client_id;
+   int client_index;
    int req_pipe;
    int notif_pipe;
    board_t board;
@@ -62,7 +63,6 @@ sem_t full_buffer;                                 // semáforo que conta pedido
 int in = 0;                                        // indice de escrita (onde o produtor(host_thread) vai escrever/ colocar)
 int out = 0;                                       // indice de leitura (onde o consumidor(session_thread) vai ler/ tirar)
 volatile sig_atomic_t sigusr_received = 0;          // flag para sinal SIGUSR1
-int next_client = 1;
 
 int sort_clients(const void *a, const void *b) {
    client_game_t *clientA = (client_game_t *)a;
@@ -217,13 +217,19 @@ void* session_thread (void* arg) {
    while(1){
       sem_wait(&full_buffer);                                           // leitura do buffer produtor-consumidor
       pthread_mutex_lock(&buffer_mutex);
-      session_request_t request = buffer[out];
+      session_request_t request = buffer[out];           // request.req_pipe_path = "/tmp/id_request"
       out = (out + 1) % MAX_BUFFER_SIZE;
       pthread_mutex_unlock(&buffer_mutex);
       sem_post(&empty_buffer);
 
+
       int notif_fd, req_fd;
       char opcode = 1, result = 0;
+
+      // OBTER O ID DO CLIENTE
+      char* c = strrchr(request.req_pipe_path, '/');     // encontrar a última barra  de "/tmp/{id}_request" => c = /{id}_request
+      c ++;                                              // => c = {id}_request
+      int client_id = atoi(c);                           // lê os números até encontrar algo que nãpo seja número
       
       notif_fd = open(request.notif_pipe_path, O_WRONLY);                     
       write(notif_fd, &opcode, sizeof(char));                           // envia o resultado do connect
@@ -241,6 +247,7 @@ void* session_thread (void* arg) {
       session->levels_dir = levels_dir;
       session->victory = 0;
       session->game_over = 0;
+      session->client_id = client_id;
       pthread_rwlock_init(&session->victory_lock, NULL);
       int current_level = 0;
       int accumulated_points = 0;
@@ -248,17 +255,28 @@ void* session_thread (void* arg) {
 
       // ADICIONA A INFO DE UM CLIENTE À LISTA DE CLIENTES
       pthread_mutex_lock(&clients_mutex);
-      if(session->client_id >= MAX_CLIENTS){
+
+      // Procurar uma posição livre no array
+      int client_index = -1;
+      for(int i = 0; i < MAX_CLIENTS; i++) {
+         if(!clients[i].active) {
+            client_index = i;
+            break;
+         }
+      }
+
+      if(client_index == -1){
          debug("Número máximo de clientes atingido\n");
          close(session->req_pipe);
          close(session->notif_pipe);
+         pthread_mutex_unlock(&clients_mutex);
          free(session);
          continue;
       }
-      session->client_id = next_client++;
-      clients[session->client_id].id = session->client_id;
-      clients[session->client_id].points = 0;
-      clients[session->client_id].active = 1;
+      clients[client_index].id = session->client_id;
+      clients[client_index].points = 0;
+      clients[client_index].active = 1;
+      session->client_index = client_index;
       pthread_mutex_unlock(&clients_mutex);
 
 
@@ -315,7 +333,7 @@ void* session_thread (void* arg) {
          
          // ATUALIZAÇÃO PONTUACAO DO CLIENTE CONSTANTE
          pthread_mutex_lock(&clients_mutex);
-         clients[session->client_id].points = temp.pacmans[0].points;
+         clients[session->client_index].points = temp.pacmans[0].points;
          pthread_mutex_unlock(&clients_mutex);
          
          char *data = malloc(temp.width * temp.height);
@@ -412,7 +430,7 @@ void* session_thread (void* arg) {
       close(session->req_pipe);
       close(session->notif_pipe);
       pthread_rwlock_destroy(&session->victory_lock);
-      clients[session->client_id].active = 0;
+      clients[session->client_index].active = 0;
       free(session);
    }
    return NULL;
