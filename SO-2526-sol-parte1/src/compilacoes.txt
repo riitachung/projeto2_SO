@@ -45,3 +45,9 @@ ist1114055@sigma02:
 
 
 não pode ser, o número no final tem de ser igual em todos os terminais.
+
+COISAS IMPORTANTES
+- ver se os clientes podem ser introduzidos com ids iguais, se puderem o que fazer?
+- fazer levels para entregar (posso fazer Rita)
+- por coisas em funções
+- last check
