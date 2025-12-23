@@ -1,9 +1,3 @@
-/*
-gcc server.c game.c board.c parser.c display.c -o 
-PacmanIST -Wall -Wextra -pthread -I ../include -lncursesw
-*/
-
-
 #include "api.h"
 #include "protocol.h"
 #include "debug.h"
@@ -26,44 +20,44 @@ struct Session {
 extern Board board;
 static struct Session session = {.id = -1};
 
+/// @brief função que conecta o cliente ao servidor
+/// @param req_pipe_path 
+/// @param notif_pipe_path 
+/// @param server_pipe_path 
+/// @return 0 se sucesso, 1 se erro
 int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char const *server_pipe_path) {
 
   unlink(req_pipe_path);                                                // remove possíveis pipes criados anteriormente
   unlink(notif_pipe_path);
 
   int server_fd, notif_fd, request_fd;
-  char op_code = 1, opcode_notif, result, request_buffer[40] = {0}, notif_buffer[40] = {0};
+  char opcode_connect = 1, opcode_notif, result, request_buffer[40] = {0}, notif_buffer[40] = {0};
 
   /*------- CRIAÇÃO DOS FIFOS DO CLIENTE -------*/
-  if(mkfifo(req_pipe_path, 0666) < 0) exit(1);                          // cliente manda comandos ao serv
-  if(mkfifo(notif_pipe_path, 0666) < 0) exit(1);                        // servidor manda updates do board ao cliente (0666- R/W)
+  if(mkfifo(req_pipe_path, 0666) < 0) return 1;                         // fifo de pedidos de comandos ao servidor
+  if(mkfifo(notif_pipe_path, 0666) < 0) return 1;                       // fifo de notificações que recebe updates do tabuleiro
 
   /*----- ABRE O FIFO DE PEDIDO DE SESSÃO ------*/
-  if((server_fd = open(server_pipe_path, O_WRONLY)) < 0) exit(1);       
-  write(server_fd, &op_code, 1);                                        // mensagem para o pipe de registo do serv (opcode->1, char[40])
-
-  strncpy(request_buffer, req_pipe_path, sizeof(request_buffer) - 1);   // cria um buffer dos nomes dos paths dos pipes de pedidos e de notificações
+  if((server_fd = open(server_pipe_path, O_WRONLY)) < 0) return 1;       
+  if(write(server_fd, &opcode_connect, sizeof(char)) != 1) return 1;    // escreve o opcode de pedido de sessão (1) no fifo de registo
+                                    
+  strncpy(request_buffer, req_pipe_path, sizeof(request_buffer) - 1);   // cria um buffer com os 40 caracteres dos nomes dos paths dos pipes
   strncpy(notif_buffer, notif_pipe_path, sizeof(notif_buffer) - 1);
 
   /*----- PASSAGEM DOS FIFOS DO CLIENTE PARA O SERVIDOR-----*/  
-  write(server_fd, request_buffer, sizeof(request_buffer));
-  write(server_fd, notif_buffer, sizeof(notif_buffer));
+  if(write(server_fd, request_buffer, sizeof(request_buffer)) != 40 ||
+    write(server_fd, notif_buffer, sizeof(notif_buffer)) != 40) return 1;
+
   close(server_fd);
-  if((notif_fd = open(notif_pipe_path, O_RDONLY)) < 0) exit (1);        // debloqueia fifo de notificações do servidor
+  if((notif_fd = open(notif_pipe_path, O_RDONLY)) < 0) return 1;        // debloqueia fifo de notificações do servidor
 
   /*---------- LÊ RESPOSTA DO SERVER ----------*/  
-  if(read(notif_fd, &opcode_notif, sizeof(char)) <= 0 || (opcode_notif != 1)) exit(1);                         
-  if(read(notif_fd, &result, sizeof(char)) <= 0) exit(1);
-
-  if(result != 0) {
-    fprintf(stderr, "Servidor não aceitou a conexão\n");                // resultado tem de ser 0 e opcode retornado tem de ser 1
-    return 1;
-  }
-
+  if(read(notif_fd, &opcode_notif, sizeof(char)) != 1 || (opcode_notif != 1)) return 1;                         
+  if(read(notif_fd, &result, sizeof(char)) != 1) return 1;
+  if(result != 0) return 1;
+  
   /*----------- ABRIR FIFO PEDIDOS ------------*/
-  request_fd = open(req_pipe_path, O_WRONLY);
-
-  if(request_fd < 0) exit(1);
+  if((request_fd = open(req_pipe_path, O_WRONLY)) < 0) return 1;
 
   /*--------- GUARDAR DADOS DA SESSÃO ---------*/
   session.req_pipe = request_fd;
@@ -75,35 +69,33 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
   return 0;
 }
 
-// recebe o command do client_main
+
+/// @brief função que envia o comando desejado para o pacman para o servidor
+/// @param command 
+/// @return 0 se sucesso, -1 se erro
 int pacman_play(char command) {
   char opcode_play = 3;
-  if(session.req_pipe < 0) return -1;
-  if(write(session.req_pipe, &opcode_play, sizeof(char)) != 1) return -1;  
+  if(write(session.req_pipe, &opcode_play, sizeof(char)) != 1) return -1;   // manda o opcode de jogada (3) e o comando para o fifo de pedidos
   if(write(session.req_pipe, &command, sizeof(char)) != 1) return -1;
   return 0;
 }
 
+
+/// @brief função que disconecta o cliente do servidor
+/// @return 0 se sucesso, 1 se erro
 int pacman_disconnect() {
-  debug("1\n");
   char opcode_disconnect = 2;
-  if(session.req_pipe < 0) return -1;
-  debug("2\n");
   
-  if(write(session.req_pipe, &opcode_disconnect, sizeof(char)) != 1) {
-    debug("return -1\n");
-    return -1; 
-  }
-  debug("opcode disconect: %d\n", opcode_disconnect);
+  if(write(session.req_pipe, &opcode_disconnect, sizeof(char)) != 1) return -1; 
+  
   /*------ FECHA OS PIPES DA SESSÃO ------*/
   close(session.req_pipe);
   close(session.notif_pipe);
-  debug("fechei pipes disconect");
+  debug("pipes closed\n");
 
   /*----- REMOVE OS PIPES DA SESSÃO -----*/
   unlink(session.req_pipe_path);
   unlink(session.notif_pipe_path);
-  debug("unlink pipes disconect");
 
   /*------ REEINICIAR A SESSÃO -------*/
   session.req_pipe = -1;
@@ -114,30 +106,35 @@ int pacman_disconnect() {
   return 0;
 }
 
+
+/// @brief recebe atualizações do tabuleiro pelo pipe das notificações
+/// @param void 
+/// @return Board atualizado
 Board receive_board_update(void) {
   char opcode;
-  size_t bytes_read;
-  bytes_read = read(session.notif_pipe, &opcode, sizeof(char));
-  if(bytes_read <= 0) {
-    debug("Erro ao ler opcode 4\n");
-    board.game_over = 1;
-    return board;
-  }
-  if((read(session.notif_pipe, &board.width, sizeof(int)) <= 0) ||
-  (read(session.notif_pipe, &board.height, sizeof(int)) <= 0) ||
-  (read(session.notif_pipe, &board.tempo, sizeof(int)) <= 0) ||
-  (read(session.notif_pipe, &board.victory, sizeof(int)) <= 0) ||
-  (read(session.notif_pipe, &board.game_over, sizeof(int)) <= 0) ||
-  (read(session.notif_pipe, &board.accumulated_points, sizeof(int)) <= 0)){
+  if(read(session.notif_pipe, &opcode, sizeof(char)) != 1) {
     board.game_over = 1;
     return board;
   }
 
+  /*------- LÊ AS INFORMAÇÕES DO TABULEIRO -------*/
+  if((read(session.notif_pipe, &board.width, sizeof(int)) != sizeof(int)) ||
+  (read(session.notif_pipe, &board.height, sizeof(int)) != sizeof(int)) ||
+  (read(session.notif_pipe, &board.tempo, sizeof(int)) != sizeof(int)) ||
+  (read(session.notif_pipe, &board.victory, sizeof(int)) != sizeof(int)) ||
+  (read(session.notif_pipe, &board.game_over, sizeof(int)) != sizeof(int)) ||
+  (read(session.notif_pipe, &board.accumulated_points, sizeof(int)) != sizeof(int))){
+    board.game_over = 1;
+    return board;
+  }
+
+  /*------- LÊ E ALOCA MEMÓRIA PARA A DATA --------*/
+  int size = board.width * board.height;
   if(board.data == NULL)
-    board.data = malloc(board.width * board.height);
+    board.data = malloc(size);
   else 
-    board.data = realloc(board.data, board.width * board.height);
-  if(read(session.notif_pipe, board.data, (board.width * board.height)) <= 0){
+    board.data = realloc(board.data, size);
+  if(read(session.notif_pipe, board.data, size) != size) {
     board.game_over = 1;
     return board;
   }

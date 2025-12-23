@@ -8,8 +8,6 @@ Command: Q
 Returning receiver thread...
 Stop execution
 Receiver thread terminada
-1
-2
-opcode disconect: 2
-fechei pipes disconectunlink pipes disconectPacman desconectado
+pipes closed
+Pacman desconectado
 refresh do screen e terminal cleanup
