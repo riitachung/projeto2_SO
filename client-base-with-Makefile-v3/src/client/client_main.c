@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
     terminal_init();
     set_timeout(500);
     if(board.width > 0 && board.height > 0)
-    draw_board_client(board);
+        draw_board_client(board);
     refresh_screen();
 
     char command;
@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
                 debug("Stop execution\n");
                 pthread_mutex_unlock(&mutex);
                 break;
-            }       //TO-DO VER 
+            }       
             pthread_mutex_unlock(&mutex);
 
             // Input from file
@@ -167,9 +167,9 @@ int main(int argc, char *argv[]) {
             continue;
 
         if (command == 'Q') {
-            pacman_disconnect();
+            //pacman_play('Q');
             debug("Client pressed 'Q', quitting game\n");
-            break;
+            //break;
         }
 
         debug("Command: %c\n", command);
@@ -181,7 +181,7 @@ int main(int argc, char *argv[]) {
     pthread_join(receiver_thread_id, NULL);
     debug("Receiver thread terminada\n");
 
-    //pacman_disconnect();
+    pacman_disconnect();
     debug("Pacman desconectado\n");
     if (cmd_fp)
         fclose(cmd_fp);

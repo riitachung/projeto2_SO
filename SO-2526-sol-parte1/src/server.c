@@ -472,8 +472,8 @@ void* session_thread (void* arg) {
       // FAZER UNLOAD DO ÚLTIMO NÍVEL
       unload_level(&session->board);
       debug("Cliente %d: unload do último nível feito\n", session->client_id);
-      close(session->req_pipe);
-      close(session->notif_pipe);
+      //close(session->req_pipe);
+      //close(session->notif_pipe);
       pthread_rwlock_destroy(&session->victory_lock);
       clients[session->client_index].active = 0;
       free(session);

@@ -1,97 +1,12 @@
 Começou host thread
 começou session thread
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 1
-NEXT_LEVEL
-Pacman thread terminada
-Ghost thread 0: game_over detetado -> acaba a ghost thread
+começou session thread
 load_level:
 DIM = 10 x 8
 TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
 Line: XXXXXXXXXX
 Line: XXXXooo@XX
 Line: XoooooooXX
@@ -107,45 +22,10 @@ Ghost Pos = 2 x 4
 Ghost passo: 1
 Ghost Pos = 5 x 1
 
+nível second.lvl carregado
 Ghost thread 0 começou
 Ghost thread 1 começou
 Ghost thread 2 começou
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
@@ -156,151 +36,30 @@ Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Killing 0 pacman
-
-Ghost thread 0: move_ghost
-Ghost thread 0: DEAD_PACMAN -> QUIT_GAME
-O jogo terminou completamente
-Ghost thread 1: game_over detetado -> acaba a ghost thread
+Comando do pacman: Q
+result do move pacman --> -1
 Ghost thread 2: game_over detetado -> acaba a ghost thread
-Pacman thread terminada
-Cliente 3: todas as threads terminadas
-Cliente 3: unload do último nível feito
-session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-Killing 0 pacman
-
-result do move pacman --> -2
-DEAD_PACMAN -> QUIT_GAME
-Pacman thread terminada
+Ghost thread 1: game_over detetado -> acaba a ghost thread
 Ghost thread 0: game_over detetado -> acaba a ghost thread
 O jogo terminou completamente
-Cliente 30: todas as threads terminadas
-Cliente 30: unload do último nível feito
-session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 1
-NEXT_LEVEL
 Pacman thread terminada
-Ghost thread 0: game_over detetado -> acaba a ghost thread
+Cliente 2: todas as threads terminadas
+Cliente 2: unload do último nível feito
+session_thread completamente terminada
 load_level:
 DIM = 10 x 8
 TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
 Line: XXXXXXXXXX
 Line: XXXXooo@XX
 Line: XoooooooXX
@@ -316,137 +75,142 @@ Ghost Pos = 2 x 4
 Ghost passo: 1
 Ghost Pos = 5 x 1
 
-Ghost thread 1 começou
+nível second.lvl carregado
 Ghost thread 0 começou
 Ghost thread 2 começou
-Ghost thread 1: move_ghost
+Ghost thread 1 começou
 Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Comando do pacman: S
 result do move pacman --> 0
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
 Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
 Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
 Comando do pacman: S
 result do move pacman --> 0
 Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Comando do pacman: A
+Comando do pacman: S
 result do move pacman --> -1
 Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
 Comando do pacman: D
+result do move pacman --> 0
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Killing 0 pacman
+
+Ghost thread 2: move_ghost
+Ghost thread 2: DEAD_PACMAN -> QUIT_GAME
+O jogo terminou completamente
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Pacman thread terminada
+Cliente 2: todas as threads terminadas
+Cliente 2: unload do último nível feito
+session_thread completamente terminada
+load_level:
+DIM = 10 x 8
+TEMPO = 200
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível second.lvl carregado
+Ghost thread 0 começou
+Ghost thread 1 começou
+Ghost thread 2 começou
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+result do move pacman --> 0
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: A
+result do move pacman --> 0
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: A
 Killing 0 pacman
 
 result do move pacman --> -2
 DEAD_PACMAN -> QUIT_GAME
 Pacman thread terminada
-Ghost thread 2: game_over detetado -> acaba a ghost thread
 O jogo terminou completamente
 Ghost thread 1: game_over detetado -> acaba a ghost thread
 Ghost thread 0: game_over detetado -> acaba a ghost thread
-Cliente 3: todas as threads terminadas
-Cliente 3: unload do último nível feito
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Cliente 2: todas as threads terminadas
+Cliente 2: unload do último nível feito
 session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 1
-NEXT_LEVEL
-Pacman thread terminada
-Ghost thread 0: game_over detetado -> acaba a ghost thread
 load_level:
 DIM = 10 x 8
 TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
 Line: XXXXXXXXXX
 Line: XXXXooo@XX
 Line: XoooooooXX
@@ -462,128 +226,79 @@ Ghost Pos = 2 x 4
 Ghost passo: 1
 Ghost Pos = 5 x 1
 
+nível second.lvl carregado
 Ghost thread 0 começou
 Ghost thread 1 começou
 Ghost thread 2 começou
-Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: D
+result do move pacman --> 0
 Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: D
+result do move pacman --> 0
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
+Comando do pacman: D
+result do move pacman --> 1
+NEXT_LEVEL
+Pacman thread terminada
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+load_level:
+DIM = 8 x 4
+TEMPO = 200
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+Ghost thread 0 começou
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: D
+result do move pacman --> 0
+Ghost thread 0: move_ghost
 Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
 Killing 0 pacman
 
-Ghost thread 0: move_ghost
-Ghost thread 0: DEAD_PACMAN -> QUIT_GAME
+result do move pacman --> -2
+DEAD_PACMAN -> QUIT_GAME
+Pacman thread terminada
 O jogo terminou completamente
-Ghost thread 2: game_over detetado -> acaba a ghost thread
-Ghost thread 1: game_over detetado -> acaba a ghost thread
-Pacman thread terminada
-Cliente 30: todas as threads terminadas
-Cliente 30: unload do último nível feito
-session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 1
-NEXT_LEVEL
-Pacman thread terminada
 Ghost thread 0: game_over detetado -> acaba a ghost thread
+Cliente 2: todas as threads terminadas
+Cliente 2: unload do último nível feito
+session_thread completamente terminada
 load_level:
 DIM = 10 x 8
 TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
 Line: XXXXXXXXXX
 Line: XXXXooo@XX
 Line: XoooooooXX
@@ -599,86 +314,183 @@ Ghost Pos = 2 x 4
 Ghost passo: 1
 Ghost Pos = 5 x 1
 
+nível second.lvl carregado
+Ghost thread 0 começou
 Ghost thread 1 começou
 Ghost thread 2 começou
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
 Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
 Comando do pacman: D
 result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
 Comando do pacman: D
 result do move pacman --> 0
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
 Comando do pacman: D
 result do move pacman --> 1
 NEXT_LEVEL
 Pacman thread terminada
-Ghost thread 2: game_over detetado -> acaba a ghost thread
 Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+load_level:
+DIM = 8 x 4
+TEMPO = 200
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+Ghost thread 0 começou
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: D
+result do move pacman --> 0
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: D
+result do move pacman --> 1
+NEXT_LEVEL
+Pacman thread terminada
 Ghost thread 0: game_over detetado -> acaba a ghost thread
 Último nível completo, game_over setado
 O jogo terminou completamente
-Cliente 3: unload do último nível feito
+Cliente 2: unload do último nível feito
 session_thread completamente terminada
 load_level:
-DIM = 8 x 4
+DIM = 10 x 8
 TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
 Ghost passo: 1
 Ghost Pos = 5 x 1
 
-nível 1.lvl carregado
+nível second.lvl carregado
 Ghost thread 0 começou
+Ghost thread 1 começou
+Ghost thread 2 começou
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+load_level:
+DIM = 10 x 8
+TEMPO = 200
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível second.lvl carregado
+Ghost thread 0 começou
+Ghost thread 1 começou
+Ghost thread 2 começou
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Comando do pacman: D
+result do move pacman --> 0
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: D
+result do move pacman --> 0
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
+Comando do pacman: D
+result do move pacman --> 1
+NEXT_LEVEL
 Pacman thread terminada
-Erro ao escrever no pipe de notificações (server)
 Ghost thread 0: game_over detetado -> acaba a ghost thread
-Cliente 30: todas as threads terminadas
-Cliente 30: unload do último nível feito
-session_thread completamente terminada
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Ghost thread 1: game_over detetado -> acaba a ghost thread
 load_level:
 DIM = 8 x 4
 TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
+MON file: /home/ritachung/SO/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
 Line: XXXXXXXX
 Line: XXXXoo@X
 Line: XooooooX
@@ -686,422 +498,199 @@ Line: XXXXXXXX
 Ghost passo: 1
 Ghost Pos = 5 x 1
 
-nível 1.lvl carregado
 Ghost thread 0 começou
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: D
+Killing 0 pacman
+
+result do move pacman --> -2
+DEAD_PACMAN -> QUIT_GAME
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+O jogo terminou completamente
+Cliente 2: todas as threads terminadas
+Cliente 2: unload do último nível feito
+session_thread completamente terminada
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: G
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: Q
 result do move pacman --> -1
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: W
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Killing 0 pacman
-
-result do move pacman --> -2
-DEAD_PACMAN -> QUIT_GAME
-Pacman thread terminada
-O jogo terminou completamente
-Ghost thread 0: game_over detetado -> acaba a ghost thread
-Cliente 3: todas as threads terminadas
-Cliente 3: unload do último nível feito
-session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 1
-NEXT_LEVEL
-Pacman thread terminada
-Ghost thread 0: game_over detetado -> acaba a ghost thread
-load_level:
-DIM = 10 x 8
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXXXX
-Line: XXXXooo@XX
-Line: XoooooooXX
-Line: XooooooXXX
-Line: XooooooooX
-Line: XooooooooX
-Line: XooooooooX
-Line: XXXXXXXXXX
-Ghost passo: 1
-Ghost Pos = 4 x 4
-Ghost passo: 1
-Ghost Pos = 2 x 4
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-Ghost thread 0 começou
-Ghost thread 1 começou
-Ghost thread 2 começou
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Comando do pacman: S
-Killing 0 pacman
-
-result do move pacman --> -2
-DEAD_PACMAN -> QUIT_GAME
-Pacman thread terminada
-Ghost thread 1: game_over detetado -> acaba a ghost thread
-O jogo terminou completamente
-Ghost thread 0: game_over detetado -> acaba a ghost thread
-Ghost thread 2: game_over detetado -> acaba a ghost thread
-Cliente 30: todas as threads terminadas
-Cliente 30: unload do último nível feito
-session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 0
-Ghost thread 0: move_ghost
-Comando do pacman: D
-result do move pacman --> 1
-NEXT_LEVEL
-Pacman thread terminada
-Ghost thread 0: game_over detetado -> acaba a ghost thread
-load_level:
-DIM = 10 x 8
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m3.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m2.m
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXXXX
-Line: XXXXooo@XX
-Line: XoooooooXX
-Line: XooooooXXX
-Line: XooooooooX
-Line: XooooooooX
-Line: XooooooooX
-Line: XXXXXXXXXX
-Ghost passo: 1
-Ghost Pos = 4 x 4
-Ghost passo: 1
-Ghost Pos = 2 x 4
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-Ghost thread 0 começou
-Ghost thread 2 começou
-Ghost thread 1 começou
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: S
-result do move pacman --> 0
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: A
-result do move pacman --> 0
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 2: move_ghost
-Ghost thread 1: move_ghost
-Killing 0 pacman
-
-Ghost thread 0: move_ghost
-Ghost thread 0: DEAD_PACMAN -> QUIT_GAME
 O jogo terminou completamente
 Ghost thread 2: game_over detetado -> acaba a ghost thread
+Ghost thread 0: game_over detetado -> acaba a ghost thread
 Ghost thread 1: game_over detetado -> acaba a ghost thread
 Pacman thread terminada
-Cliente 3: todas as threads terminadas
-Cliente 3: unload do último nível feito
-session_thread completamente terminada
-load_level:
-DIM = 8 x 4
-TEMPO = 200
-MON file: /home/vitoria/tecnico/projeto2_SO/SO-2526-sol-parte1/levels/m1.m
-Line: XXXXXXXX
-Line: XXXXoo@X
-Line: XooooooX
-Line: XXXXXXXX
-Ghost passo: 1
-Ghost Pos = 5 x 1
-
-nível 1.lvl carregado
-Ghost thread 0 começou
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Pacman thread terminada
-Erro ao escrever no pipe de notificações (server)
-Ghost thread 0: game_over detetado -> acaba a ghost thread
-Cliente 30: todas as threads terminadas
-Cliente 30: unload do último nível feito
+Cliente 2: todas as threads terminadas
+Cliente 2: unload do último nível feito
 session_thread completamente terminada
