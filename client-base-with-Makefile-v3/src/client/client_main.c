@@ -19,25 +19,26 @@ bool stop_execution = false;
 int tempo;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+
+//tarefa que recebe atualizações do tabuleiro do servidor, verifica as condições e desenha o tabuleiro
 static void *receiver_thread(void *arg) {
     (void)arg;
     debug("receiver_thread:\n");
 
     while (true) {
-        board = receive_board_update();
+        board = receive_board_update();                             // recebe o tabuleiro atualizado via api
 
         pthread_mutex_lock(&mutex);
         tempo = board.tempo;
         pthread_mutex_unlock(&mutex);
 
-        draw_board_client(board);
+        draw_board_client(board);                                   // desenha o tabuleiro com as informações recebidas
         refresh_screen();
         
-        if (!board.data || board.game_over == 1){
+        if (!board.data || board.game_over == 1){                   // se o tabuleiro não for válido ou o jogo terminou, sai da thread
             pthread_mutex_lock(&mutex);
             stop_execution = true;
             pthread_mutex_unlock(&mutex);
-            debug("!board.data || board.game_over == 1\n");
             break;
         }
 
@@ -92,7 +93,6 @@ int main(int argc, char *argv[]) {
 
     pthread_t receiver_thread_id;
     pthread_create(&receiver_thread_id, NULL, receiver_thread, NULL);
-    debug("receiver_thread iniciada\n");
 
     terminal_init();
     set_timeout(500);
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]) {
                 debug("Stop execution\n");
                 pthread_mutex_unlock(&mutex);
                 break;
-            }       //TO-DO VER 
+            }       
             pthread_mutex_unlock(&mutex);
 
             command = toupper(command);
@@ -187,7 +187,6 @@ int main(int argc, char *argv[]) {
         fclose(cmd_fp);
 
     pthread_mutex_destroy(&mutex);
-    debug("refresh do screen e terminal cleanup\n");
     refresh_screen();
     terminal_cleanup();
 
