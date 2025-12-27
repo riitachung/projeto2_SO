@@ -45,7 +45,7 @@ não pode ser, o número no final tem de ser igual em todos os terminais.
 
 COISAS IMPORTANTES
 - ver se os clientes podem ser introduzidos com ids iguais, se puderem o que fazer?
-- niveis do pacman tambem podem ser lidos na diretoria a exceçao dos movimentos 
+- niveis do pacman tambem podem ser lidos na diretoria a exceçao dos movimentos ??
 - fazer levels para entregar (posso fazer Rita)
 - por coisas em funções
 - verificaçoes (mallocs)

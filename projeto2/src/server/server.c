@@ -333,9 +333,23 @@ void* session_thread (void* arg) {
       int n_ghosts = session->board.n_ghosts;
       pthread_t pacman_tid;
       pthread_t *ghost_tids = malloc(n_ghosts * sizeof(pthread_t));
+      if(!ghost_tids) {
+         debug("Erro ao alocar memória para as threads dos monstros\n");
+         close(req_fd);
+         close(notif_fd);
+         free(session);
+         break;
+      }
       pthread_create(&pacman_tid, NULL, pacman_thread, (void*) session);
       for (int i = 0; i < n_ghosts; i++) {
          ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
+         if(!arg_ghost){
+            debug("Erro ao alocar memória para os argumentos dos monstros\n");
+            close(req_fd);
+            close(notif_fd);
+            free(session);
+            break;
+         }
          arg_ghost->sessionArguments = session;
          arg_ghost->ghost_index = i;
          pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
@@ -383,6 +397,9 @@ void* session_thread (void* arg) {
          if(!data){
             pthread_rwlock_unlock(&session->board.state_lock);  
             debug("Erro ao alocar memória para data do board\n");
+            close(req_fd);
+            close(notif_fd);
+            free(session);
             break;
          }
 
@@ -440,9 +457,23 @@ void* session_thread (void* arg) {
                // recomeça as threads
                n_ghosts = session->board.n_ghosts;
                ghost_tids = malloc(n_ghosts * sizeof(pthread_t));
+               if(!ghost_tids) {
+                  debug("Erro ao alocar memória para as threads dos monstros\n");
+                  close(req_fd);
+                  close(notif_fd);
+                  free(session);
+                  break;
+               }
                pthread_create(&pacman_tid, NULL, pacman_thread, (void*) session);
                for (int i = 0; i < n_ghosts; i++) {
                   ghost_thread_arg_t *arg_ghost = malloc(sizeof(ghost_thread_arg_t));
+                  if(!arg_ghost){
+                     debug("Erro ao alocar memória para os argumentos dos monstros\n");
+                     close(req_fd);
+                     close(notif_fd);
+                     free(session);
+                     break;
+                  }
                   arg_ghost->sessionArguments = session;
                   arg_ghost->ghost_index = i;
                   pthread_create(&ghost_tids[i], NULL, ghost_thread, (void*) arg_ghost);
@@ -571,6 +602,10 @@ int main(int argc, char *argv[]) {                          // PacmanIST levels_
    pthread_create(&tid_host, NULL, host_thread, &server_fd);
    
    pthread_t *session_tids = malloc(max_games * sizeof(pthread_t));
+   if(!session_tids){
+      debug("Erro ao alocar memória para as threads das sessões\n");
+      return 1;
+   }
    for(int i = 0; i < max_games; i++){
       pthread_create(&session_tids[i], NULL, session_thread, levels_dir);
    }
@@ -580,6 +615,7 @@ int main(int argc, char *argv[]) {                          // PacmanIST levels_
    for(int i = 0; i < max_games; i++) {
       pthread_join(session_tids[i], NULL);
    }
+   free(session_tids);
    
    close_debug_file();
    return 0;

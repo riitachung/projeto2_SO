@@ -1,20 +1,15 @@
 Cliente pede login
 Cliente conectado
 receiver_thread:
-Command: T
-Command:  
-Command: 2
 Command: D
-Command:  
+Command: S
 Command: D
-Command: T
-Command:  
-Command: 2
+Command: W
 Command: D
-Command:  
+Command: D
 Command: D
 Returning receiver thread...
-Stop execution after sleep
+Stop execution
 Receiver thread terminada
 pipes closed
 Pacman desconectado
