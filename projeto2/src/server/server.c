@@ -78,6 +78,35 @@ int sort_clients(const void *a, const void *b) {
    return client_b->points - client_a->points;                       // ordem decrescente
 }
 
+int add_client(SessionArguments* session){
+   pthread_mutex_lock(&clients_mutex);
+
+   // Procurar uma posição livre no array
+   int client_index = -1;
+   for(int i = 0; i < MAX_CLIENTS; i++) {
+      if(!clients[i].active) {
+         client_index = i;
+         break;
+      }
+   }
+
+   if(client_index == -1){                                             // erro se não houver espaço para mais clientes
+      debug("Número máximo de clientes atingido\n");
+      close(session->req_pipe);
+      close(session->notif_pipe);
+      pthread_mutex_unlock(&clients_mutex);
+      free(session);
+      return 1;
+   }
+   clients[client_index].id = session->client_id;
+   clients[client_index].points = 0;
+   clients[client_index].active = 1;
+   session->client_index = client_index;
+   
+   pthread_mutex_unlock(&clients_mutex);
+   return 0;
+}
+
 
 /*--------- FUNÇÃO QUE GERA O FICHEIRO TOP 5 ---------*/
 void generate_file() {
@@ -243,12 +272,12 @@ void* ghost_thread(void *arg) {
 /*---------- THREAD GESTORA DE SESSÃO -----------*/
 /// @brief thread que gere a sessão de cada cliente
 void* session_thread (void* arg) {
-   char* levels_dir = (char*) arg;                                      // recebe a diretoria dos niveis como argumento
+   char* levels_dir = (char*) arg;                       // recebe a diretoria dos niveis como argumento
    debug("começou session thread\n");
 
 /*--------FASE GESTÃO DA SESSÃO ---------*/
    while(1){
-      sem_wait(&full_buffer);                                           // leitura do buffer produtor-consumidor
+      sem_wait(&full_buffer);                            // leitura do buffer produtor-consumidor
       pthread_mutex_lock(&buffer_mutex);
       session_request_t request = buffer[out];          
       out = (out + 1) % MAX_BUFFER_SIZE;
@@ -260,8 +289,8 @@ void* session_thread (void* arg) {
 
       // OBTER O ID DO CLIENTE
       char* c = strrchr(request.req_pipe_path, '/');     // encontrar a última barra  de "/tmp/{id}_request" => c = /{id}_request
-      c++;                                              // => c = {id}_request
-      int client_id = atoi(c);                           // lê os números até encontrar algo que nãpo seja número
+      c++;                                               // => c = {id}_request
+      int client_id = atoi(c);                           // lê os números até encontrar algo que não seja número
       
       // ENVIA RESULTADO DO CONNECT
       notif_fd = open(request.notif_pipe_path, O_WRONLY);
@@ -297,29 +326,8 @@ void* session_thread (void* arg) {
       pthread_rwlock_init(&session->victory_lock, NULL);
 
       // ADICIONA A INFORMAÇÃO DE UM CLIENTE À LISTA DE CLIENTES
-      pthread_mutex_lock(&clients_mutex);
-      // Procurar uma posição livre no array
-      int client_index = -1;
-      for(int i = 0; i < MAX_CLIENTS; i++) {
-         if(!clients[i].active) {
-            client_index = i;
-            break;
-         }
-      }
-
-      if(client_index == -1){                                             // erro se não houver espaço para mais clientes
-         debug("Número máximo de clientes atingido\n");
-         close(session->req_pipe);
-         close(session->notif_pipe);
-         pthread_mutex_unlock(&clients_mutex);
-         free(session);
-         continue;
-      }
-      clients[client_index].id = session->client_id;
-      clients[client_index].points = 0;
-      clients[client_index].active = 1;
-      session->client_index = client_index;
-      pthread_mutex_unlock(&clients_mutex);
+      if(add_client(session) == 1) continue;
+      
 
       /*----------- FASE DO TABULEIROS -----------*/ 
       session->session_files = manage_files(levels_dir);

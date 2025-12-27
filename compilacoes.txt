@@ -48,5 +48,5 @@ COISAS IMPORTANTES
 - niveis do pacman tambem podem ser lidos na diretoria a exceçao dos movimentos ??
 - fazer levels para entregar (posso fazer Rita)
 - por coisas em funções
-- verificaçoes (mallocs)
+- verificaçoes (mallocs) 
 - last check
