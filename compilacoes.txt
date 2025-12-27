@@ -1,8 +1,5 @@
------ correr servidor -----
-rita: 
-./bin/Pacmanist ~/SO/projeto2_SO/SO-2526-sol-parte1/levels 1 /tmp/server_reg
-vitoria: 
-./bin/Pacmanist ~/tecnico/projeto2_SO/SO-2526-sol-parte1/levels 1 /tmp/server_reg
+----- correr servidor ----- 
+./bin/PacmanIST levels 1 /tmp/server_reg
 
 ----- compilar e correr correr cliente: -----
 cd client-base-with-Makefile-v3/
@@ -48,6 +45,8 @@ não pode ser, o número no final tem de ser igual em todos os terminais.
 
 COISAS IMPORTANTES
 - ver se os clientes podem ser introduzidos com ids iguais, se puderem o que fazer?
+- niveis do pacman tambem podem ser lidos na diretoria a exceçao dos movimentos 
 - fazer levels para entregar (posso fazer Rita)
 - por coisas em funções
+- verificaçoes (mallocs)
 - last check

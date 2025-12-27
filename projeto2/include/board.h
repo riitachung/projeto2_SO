@@ -61,6 +61,8 @@ typedef struct {
     char ghosts_files[MAX_GHOSTS][256]; // files with monster movements
     int tempo; // Duracao de cada jogada???
     pthread_rwlock_t state_lock;
+    pthread_rwlock_t victory_lock;
+
 } board_t;
 
 /*Move pacman/monster in a certain direction on the board must check for boundaries, walls and other monsters
@@ -87,6 +89,16 @@ int load_level(board_t* board, char* filename, char* dirname, int accumulated_po
 // Unloads levels loaded by load_level
 void unload_level(board_t * board);
 
+// DEBUG FILE
+
+void open_debug_file(char *filename);
+
+void close_debug_file();
+
+void debug(const char * format, ...);
+
 void print_board(board_t* board);
+
+void sleep_ms(int milliseconds);
 
 #endif
