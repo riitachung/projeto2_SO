@@ -1,3 +1,14 @@
 Cliente pede login
 Cliente conectado
 receiver_thread:
+Command: D
+Command: D
+Command: S
+Command: S
+Client pressed 'Q', quitting game
+Command: Q
+Returning receiver thread...
+Stop execution
+Receiver thread terminada
+pipes closed
+Pacman desconectado

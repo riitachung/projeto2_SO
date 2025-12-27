@@ -78,6 +78,25 @@ int sort_clients(const void *a, const void *b) {
    return client_b->points - client_a->points;                       // ordem decrescente
 }
 
+int open_client_pipes(session_request_t request, int* req_fd, int* notif_fd){
+   char opcode = 1, result = 0;
+   *notif_fd = open(request.notif_pipe_path, O_WRONLY);
+   if(*notif_fd < 0) return 1;
+
+   if(write(*notif_fd, &opcode, sizeof(char)) != 1 ||                           
+      write(*notif_fd, &result, sizeof(char)) != 1) {
+      close(*notif_fd);
+      return 1;
+   }
+   *req_fd = open(request.req_pipe_path, O_RDONLY);                    // após conectar abre o fifo dos pedidos
+   if(*req_fd < 0) {
+      close(*notif_fd);
+      return 1;
+   }
+
+   return 0;
+}
+
 int add_client(SessionArguments* session){
    pthread_mutex_lock(&clients_mutex);
 
@@ -285,7 +304,6 @@ void* session_thread (void* arg) {
       sem_post(&empty_buffer);
 
       int notif_fd, req_fd;
-      char opcode = 1, result = 0;
 
       // OBTER O ID DO CLIENTE
       char* c = strrchr(request.req_pipe_path, '/');     // encontrar a última barra  de "/tmp/{id}_request" => c = /{id}_request
@@ -293,19 +311,8 @@ void* session_thread (void* arg) {
       int client_id = atoi(c);                           // lê os números até encontrar algo que não seja número
       
       // ENVIA RESULTADO DO CONNECT
-      notif_fd = open(request.notif_pipe_path, O_WRONLY);
-      if(notif_fd < 0) continue;                     
-      if(write(notif_fd, &opcode, sizeof(char)) != 1 ||                           
-         write(notif_fd, &result, sizeof(char)) != 1) {
-         close(notif_fd);
-         continue;
-      }
-      req_fd = open(request.req_pipe_path, O_RDONLY);                    // após conectar abre o fifo dos pedidos
-      if(req_fd < 0) {
-         close(notif_fd);
-         continue;
-      }
-
+      if (open_client_pipes(request, &req_fd, &notif_fd) == 1) continue;
+      
       // DEFINIR ARGUMENTOS DA SESSÃO
       struct SessionArguments *session = malloc(sizeof(SessionArguments));
       if(!session) {

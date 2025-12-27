@@ -16,6 +16,32 @@ nível 1.lvl carregado
 Ghost thread 0 começou
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
+Comando do pacman: D
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Killing 0 pacman
+
+DEAD_PACMAN -> QUIT_GAME
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+O jogo terminou completamente
+Cliente 2: todas as threads terminadas
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 4
+TEMPO = 200
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível 1.lvl carregado
+Ghost thread 0 começou
+Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Comando do pacman: D
 Ghost thread 0: move_ghost
@@ -51,9 +77,37 @@ Ghost thread 2 começou
 Ghost thread 2: move_ghost
 Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: S
-Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
 Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: D
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: D
+Comando do pacman: D
+NEXT_LEVEL
+Pacman thread terminada
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Último nível completo, game_over setado
+O jogo terminou completamente
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 4
+TEMPO = 200
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível 1.lvl carregado
+Ghost thread 0 começou
 Ghost thread 0: move_ghost
 Comando do pacman: D
 Killing 0 pacman
@@ -61,8 +115,6 @@ Killing 0 pacman
 DEAD_PACMAN -> QUIT_GAME
 Pacman thread terminada
 O jogo terminou completamente
-Ghost thread 1: game_over detetado -> acaba a ghost thread
-Ghost thread 2: game_over detetado -> acaba a ghost thread
 Ghost thread 0: game_over detetado -> acaba a ghost thread
 Cliente 2: todas as threads terminadas
 session_thread completamente terminada
@@ -82,138 +134,347 @@ nível 1.lvl carregado
 Ghost thread 0 começou
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
+Comando do pacman: D
+Comando do pacman: D
+NEXT_LEVEL
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+load_level: levelssecond.lvl
+DIM = 10 x 8
+TEMPO = 200
+MON file: levels/m3.m
+MON file: levels/m2.m
+MON file: levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+Ghost thread 0 começou
+Ghost thread 1 começou
+Ghost thread 2 começou
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: A
+Comando do pacman: S
+Killing 0 pacman
+
+DEAD_PACMAN -> QUIT_GAME
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+O jogo terminou completamente
+Cliente 2: todas as threads terminadas
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 4
+TEMPO = 200
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível 1.lvl carregado
+Ghost thread 0 começou
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: D
+Ghost thread 0: move_ghost
+Comando do pacman: D
+NEXT_LEVEL
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+load_level: levelssecond.lvl
+DIM = 10 x 8
+TEMPO = 200
+MON file: levels/m3.m
+MON file: levels/m2.m
+MON file: levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+Ghost thread 0 começou
+Ghost thread 2 começou
+Ghost thread 1 começou
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: A
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: A
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
 Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Killing 0 pacman
+
 Ghost thread 0: move_ghost
+O jogo terminou completamente
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Pacman thread terminada
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Cliente 2: todas as threads terminadas
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 4
+TEMPO = 200
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível 1.lvl carregado
+Ghost thread 0 começou
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Sinal recebido, gerando ficheiro top 5
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
+Comando do pacman: D
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: D
+NEXT_LEVEL
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+load_level: levelssecond.lvl
+DIM = 10 x 8
+TEMPO = 200
+MON file: levels/m3.m
+MON file: levels/m2.m
+MON file: levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+Ghost thread 0 começou
+Ghost thread 1 começou
+Ghost thread 2 começou
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 2: move_ghost
+Comando do pacman: A
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Comando do pacman: A
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Killing 0 pacman
+
+Ghost thread 0: move_ghost
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+O jogo terminou completamente
+Pacman thread terminada
+Cliente 2: todas as threads terminadas
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 4
+TEMPO = 200
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: XXXXoo@X
+Line: XooooooX
+Line: XXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+nível 1.lvl carregado
+Ghost thread 0 começou
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: D
+Comando do pacman: D
+NEXT_LEVEL
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+load_level: levelssecond.lvl
+DIM = 10 x 8
+TEMPO = 200
+MON file: levels/m3.m
+MON file: levels/m2.m
+MON file: levels/m1.m
+Line: XXXXXXXXXX
+Line: XXXXooo@XX
+Line: XoooooooXX
+Line: XooooooXXX
+Line: XooooooooX
+Line: XooooooooX
+Line: XooooooooX
+Line: XXXXXXXXXX
+pacman file: (null)
+Ghost passo: 1
+Ghost Pos = 4 x 4
+Ghost passo: 1
+Ghost Pos = 2 x 4
+Ghost passo: 1
+Ghost Pos = 5 x 1
+
+Ghost thread 0 começou
+Ghost thread 2 começou
+Ghost thread 1 começou
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 1: move_ghost
+Ghost thread 2: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: Q
+O jogo terminou completamente
+Ghost thread 1: game_over detetado -> acaba a ghost thread
+Ghost thread 2: game_over detetado -> acaba a ghost thread
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Pacman thread terminada
+Cliente 2: todas as threads terminadas
+session_thread completamente terminada
