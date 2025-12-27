@@ -127,6 +127,64 @@ int add_client(SessionArguments* session){
 }
 
 
+int send_board_state(int notif_fd, SessionArguments* session){
+   board_t temp;
+   pthread_rwlock_rdlock(&session->board.state_lock);
+   temp = session->board;
+   pthread_rwlock_rdlock(&session->victory_lock);
+   int current_victory = session->victory;
+   int current_game_over = session->game_over;
+   pthread_rwlock_unlock(&session->victory_lock);
+
+   if(temp.width == 0 || temp.height == 0 || !temp.board) {
+      pthread_rwlock_unlock(&session->board.state_lock);
+      debug("Board ainda não disponível\n");
+      sleep_ms(10);
+      send_board_state(notif_fd, session);
+   }
+
+   char opcode = 4;
+   if(write(notif_fd, &opcode, sizeof(char)) != 1 ||
+      write(notif_fd, &temp.width, sizeof(int)) != sizeof(int) ||
+      write(notif_fd, &temp.height, sizeof(int)) != sizeof(int) ||
+      write(notif_fd, &temp.tempo, sizeof(int)) != sizeof(int) ||
+      write(notif_fd, &current_victory, sizeof(int)) != sizeof(int) ||
+      write(notif_fd, &current_game_over, sizeof(int)) != sizeof(int) ||
+      write(notif_fd, &temp.pacmans[0].points, sizeof(int)) != sizeof(int)) {
+      pthread_rwlock_unlock(&session->board.state_lock);
+      debug("Erro ao escrever no pipe de notificações (server)\n");
+      return 1;
+   }
+
+   int size = temp.width * temp.height;
+   char* data = malloc(size);
+   if(!data){
+      pthread_rwlock_unlock(&session->board.state_lock);
+      debug("Erro ao alocar memória para data do board\n");
+      return 1;
+   }
+
+   for(int i = 0; i < size; i++){
+      if(temp.board[i].content == 'M') data[i] = 'M';
+      else if(temp.board[i].content == 'P') data[i] = 'C';
+      else if(temp.board[i].content == 'W') data[i] = '#';
+      else if(temp.board[i].has_dot) data[i] = '.';
+      else if(temp.board[i].has_portal) data[i] = '@';
+      else data[i] = ' ';
+   }
+
+   pthread_rwlock_unlock(&session->board.state_lock);
+
+   int res = (write(notif_fd, data, size));
+   if(res != size){
+      debug("Erro data\n");
+      free(data);
+      return 1;
+   }
+   
+   return 0;
+}
+
 /*--------- FUNÇÃO QUE GERA O FICHEIRO TOP 5 ---------*/
 void generate_file() {
    int top5_fd = open("top5_clients.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);   // cria e, se existir. apaga conteúdo antigo
@@ -332,8 +390,7 @@ void* session_thread (void* arg) {
       // ADICIONA A INFORMAÇÃO DE UM CLIENTE À LISTA DE CLIENTES
       if(add_client(session) == 1) continue;
       
-
-      /*----------- FASE DO TABULEIROS -----------*/ 
+      /*----------- FASE DO TABULEIRO -----------*/ 
       session->session_files = manage_files(levels_dir);
       files_t files = session->session_files;
 
@@ -368,85 +425,28 @@ void* session_thread (void* arg) {
       }
       
       // LÊ E ENVIA PERIODICAMENTE O TABULEIRO
-      board_t temp;
       while(1){
-         pthread_rwlock_rdlock(&session->board.state_lock);
-         temp = session->board;                                            // cópia do board 
-         pthread_rwlock_rdlock(&session->victory_lock);
-         int current_victory = session->victory;                           // cópia das flags  para evitar excesso de locks
-         int current_game_over = session->game_over;
-         pthread_rwlock_unlock(&session->victory_lock);
-         
-         
-         if (temp.width == 0 && temp.height == 0 && temp.board == NULL) {  // se o board ainda não foi inicializado no load_level
-            pthread_rwlock_unlock(&session->board.state_lock);
-            debug("Board ainda não disponível\n");
-            sleep_ms(10);
-            continue; 
-         }
-
-         // ESCREVE NO PIPE DAS NOTIFICAÇÕES A INFORMAÇÃO PARA CONSTRUIR TABULEIRO
-         char opcode = 4;
-         if(write(notif_fd, &opcode, sizeof(char)) != 1 ||
-         write(notif_fd, &temp.width, sizeof(int)) != sizeof(int) ||
-         write(notif_fd, &temp.height, sizeof(int)) != sizeof(int) ||
-         write(notif_fd, &temp.tempo, sizeof(int)) != sizeof(int) ||
-         write(notif_fd, &current_victory, sizeof(int)) != sizeof(int) ||                            
-         write(notif_fd, &current_game_over, sizeof(int)) != sizeof(int) ||                         
-         write(notif_fd, &temp.pacmans[0].points, sizeof(int)) != sizeof(int)) {
-            pthread_rwlock_unlock(&session->board.state_lock);  
-            debug("Erro ao escrever no pipe de notificações (server)\n");
-            break;
-         }
-         
-         // ATUALIZAÇÃO PONTUAÇÃO DO CLIENTE CONSTANTE NO ARRAY DE CLIENTES
-         pthread_mutex_lock(&clients_mutex);
-         clients[session->client_index].points = temp.pacmans[0].points;
-         pthread_mutex_unlock(&clients_mutex);
-         
-         int size = temp.width * temp.height;
-         char *data = malloc(size);
-         if(!data){
-            pthread_rwlock_unlock(&session->board.state_lock);  
-            debug("Erro ao alocar memória para data do board\n");
+         if(send_board_state(notif_fd, session) == 1){
             close(req_fd);
             close(notif_fd);
             free(session);
             break;
          }
-
-         for (int i = 0; i < size; i++) {
-            if(temp.board[i].content == 'M'){
-               data[i] = 'M';
-            } else if(temp.board[i].content == 'P'){
-               data[i] = 'C';
-            } else if (temp.board[i].content == 'W') {
-               data[i] = '#';
-            } else {
-               if(temp.board[i].has_dot == 1)
-                  data[i] = '.';
-               else if (temp.board[i].has_portal == 1)
-                  data[i] = '@';
-               else data[i] = ' ';
-            }
-         }
-
-         pthread_rwlock_unlock(&session->board.state_lock);  
-
-         if(write(notif_fd, data, size) != size) {
-            debug("Erro data\n");
-            free(data);
-            break;
-         }
-         free(data);
          
-         if (current_game_over == 1) {                                     // verifica se o jogo terminou
+         // ATUALIZAÇÃO PONTUAÇÃO DO CLIENTE CONSTANTE NO ARRAY DE CLIENTES
+         pthread_rwlock_rdlock(&session->board.state_lock);
+         pthread_mutex_lock(&clients_mutex);
+         clients[session->client_index].points = session->board.pacmans[0].points;
+         pthread_mutex_unlock(&clients_mutex);
+         pthread_rwlock_unlock(&session->board.state_lock);         
+
+         if (session->game_over) {                                     // verifica se o jogo terminou
             debug("O jogo terminou completamente\n");
             break;
          }  
 
          // NO CASO SE VITÓRIA (REACHED PORTAL)
-         if(current_victory) {
+         if(session->victory) {
             accumulated_points = session->board.pacmans[0].points;         // guardar pontos para o nível seguinte
             current_level++;
             pthread_join(pacman_tid, NULL);                                // espera que as threads terminem antes de mudar de nível
@@ -498,7 +498,7 @@ void* session_thread (void* arg) {
                debug("Último nível completo, game_over setado\n");
             }
          }
-         sleep_ms(temp.tempo); 
+         sleep_ms(session->board.tempo); 
       }
       
       // ESPERA PELAS THREADS TERMINAREM
