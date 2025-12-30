@@ -70,7 +70,6 @@ void signal_handler(int sigusr) {
    sigusr_received = 1;                                              // se recebido SIGUSR1, atualiza a flag    
 }
 
-
 /*--------- FUNÇÃO AUXILIAR À ORDENAÇÃO POR PONTOS ----------*/
 int sort_clients(const void *a, const void *b) {
    client_game_t *client_a = (client_game_t *)a;
@@ -78,6 +77,7 @@ int sort_clients(const void *a, const void *b) {
    return client_b->points - client_a->points;                       // ordem decrescente
 }
 
+/*---------- FUNÇÕES AUXILIARES À SESSION_THREAD ----------*/
 int open_client_pipes(session_request_t request, int* req_fd, int* notif_fd){
    char opcode = 1, result = 0;
    *notif_fd = open(request.notif_pipe_path, O_WRONLY);
@@ -125,7 +125,6 @@ int add_client(SessionArguments* session){
    pthread_mutex_unlock(&clients_mutex);
    return 0;
 }
-
 
 int send_board_state(int notif_fd, SessionArguments* session){
    board_t temp;
@@ -212,7 +211,6 @@ void generate_file() {
    close(top5_fd);
 }
 
-
 /*--------- THREAD DO PACMAN -----------*/
 /// @brief thread que gere o comportamento do pacman
 void* pacman_thread(void *arg) {
@@ -298,7 +296,6 @@ void* pacman_thread(void *arg) {
    return NULL;
 }
 
-
 /*---------- THREAD DO MONSTRO -----------*/
 /// @brief thread que gere o comportamento de cada monstro
 void* ghost_thread(void *arg) {
@@ -341,7 +338,6 @@ void* ghost_thread(void *arg) {
    }
    return NULL;
 }
-
 
 /*---------- THREAD GESTORA DE SESSÃO -----------*/
 /// @brief thread que gere a sessão de cada cliente
@@ -573,7 +569,6 @@ void* host_thread (void* arg) {
    }
    return NULL;
 }
-
 
 /*--------- MAIN ----------*/
 int main(int argc, char *argv[]) {                          // PacmanIST levels_dir max_games nome_do_FIFO_de_registo

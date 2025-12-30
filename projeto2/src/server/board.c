@@ -466,8 +466,6 @@ int load_ghost(board_t* board) {
     return 0;
 }
 
-
-
 int load_level(board_t *board, char *filename, char* dirname, int points) {
 
     debug("load_level: %s%s\n", dirname, filename);

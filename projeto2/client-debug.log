@@ -1,8 +1,32 @@
 Cliente pede login
 Cliente conectado
 receiver_thread:
+Command: S
+moves_to_wait: 40
+tempo: 20
+tempo * moves_to_wait: 800
+Command: T
+Command: W
 Command: D
-Command: A
+Command: D
+Command: S
+moves_to_wait: 40
+tempo: 20
+tempo * moves_to_wait: 800
+Command: T
+Command: W
+Command: D
+Command: D
+Command: S
+moves_to_wait: 40
+tempo: 200
+tempo * moves_to_wait: 8000
+Command: T
+Command: W
+Command: D
+Command: D
 Returning receiver thread...
-Stop execution
+Stop execution after sleep
 Receiver thread terminada
+pipes closed
+Pacman desconectado

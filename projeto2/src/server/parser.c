@@ -133,8 +133,6 @@ int read_level(board_t* board, char* filename, char* dirname) {
     return 0;
 }
 
-
-
 int read_pacman(board_t* board, int points) {
     pacman_t* pacman = &board->pacmans[0];
     pacman->alive = 1;
@@ -335,8 +333,6 @@ int read_line(int fd, char *buf) {
     if (n == 0 && i == 0) return 0;
     return i;                         
 }
-
-
 
 files_t manage_files(const char *path){
 

@@ -46,7 +46,6 @@ int terminal_init() {
     return 0;
 }
 
-
 void draw_board_client(Board board) {
     // Clear the screen before redrawing
     clear();

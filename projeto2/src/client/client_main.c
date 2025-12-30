@@ -130,6 +130,7 @@ int main(int argc, char *argv[]) {
                 continue;
 
             command = toupper(command);
+
             
             // Wait for tempo, to not overflow pipe with requests
             pthread_mutex_lock(&mutex);
@@ -138,6 +139,17 @@ int main(int argc, char *argv[]) {
             
             // Garantir um delay mínimo mesmo se tempo for 0
             if (wait_for <= 0) wait_for = 100; 
+
+            // se o comando for T, esperar o tempo necessário
+            
+            if (command == 'T') {
+                int moves_to_wait;
+                fscanf(cmd_fp, " %d", &moves_to_wait);
+                debug("moves_to_wait: %d\n", moves_to_wait);
+                debug("tempo: %d\n", tempo);
+                debug("tempo * moves_to_wait: %d\n", tempo * moves_to_wait);
+                sleep_ms(tempo * moves_to_wait);
+            }
 
             sleep_ms(wait_for);
             pthread_mutex_lock(&mutex);
