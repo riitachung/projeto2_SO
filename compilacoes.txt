@@ -50,3 +50,11 @@ COISAS IMPORTANTES
 - por coisas em funções
 - verificaçoes (mallocs) 
 - last check
+
+
+
+- o que acontece quando no cliente damos ctrl c?
+- por PASSO e POS no servidor
+- pacman automatico
+    - quando se faz o T e o ghost mata o pacman, o jogo so acaba quando ele acaba o T
+    

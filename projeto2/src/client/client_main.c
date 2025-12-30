@@ -136,9 +136,11 @@ int main(int argc, char *argv[]) {
             pthread_mutex_lock(&mutex);
             int wait_for = tempo;
             pthread_mutex_unlock(&mutex);
-            
+
             // Garantir um delay mínimo mesmo se tempo for 0
-            if (wait_for <= 0) wait_for = 100; 
+            if (wait_for <= 0){
+                continue;
+            } 
 
             // se o comando for T, esperar o tempo necessário
             
@@ -146,9 +148,9 @@ int main(int argc, char *argv[]) {
                 int moves_to_wait;
                 fscanf(cmd_fp, " %d", &moves_to_wait);
                 debug("moves_to_wait: %d\n", moves_to_wait);
-                debug("tempo: %d\n", tempo);
-                debug("tempo * moves_to_wait: %d\n", tempo * moves_to_wait);
-                sleep_ms(tempo * moves_to_wait);
+                debug("tempo: %d\n", wait_for);
+                debug("tempo * moves_to_wait: %d\n", wait_for * moves_to_wait);
+                sleep_ms(wait_for * moves_to_wait);
             }
 
             sleep_ms(wait_for);
