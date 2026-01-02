@@ -473,7 +473,6 @@ int load_level(board_t *board, char *filename, char* dirname, int points) {
         printf("Failed to load level\n");
         return -1;
     }
-    debug("pacman file: %s\n", board->pacman_file[0]);
     
     if (read_pacman(board, points) < 0) {
         printf("Failed to load the pacman\n");

@@ -131,7 +131,6 @@ int main(int argc, char *argv[]) {
 
             command = toupper(command);
 
-            
             // Wait for tempo, to not overflow pipe with requests
             pthread_mutex_lock(&mutex);
             int wait_for = tempo;
