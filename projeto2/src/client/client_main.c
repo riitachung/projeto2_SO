@@ -142,15 +142,14 @@ int main(int argc, char *argv[]) {
                 continue;
             } 
 
-            // se o comando for T, esperar o tempo necessário
-            
+            // se o comando for 'T', esperar o tempo necessário
             if (command == 'T') {
                 int moves_to_wait;
-                fscanf(cmd_fp, " %d", &moves_to_wait);
+                fscanf(cmd_fp, " %d", &moves_to_wait);                              // lê o número de movimentos a esperar no ficheiro
                 debug("moves_to_wait: %d\n", moves_to_wait);
                 debug("tempo: %d\n", wait_for);
                 debug("tempo * moves_to_wait: %d\n", wait_for * moves_to_wait);
-                sleep_ms(wait_for * moves_to_wait);
+                sleep_ms(wait_for * moves_to_wait);                                 // espera o número de movimetos
             }
 
             sleep_ms(wait_for);
@@ -179,12 +178,6 @@ int main(int argc, char *argv[]) {
 
         if (command == '\0')
             continue;
-
-        if (command == 'Q') {
-            //pacman_play('Q');
-            debug("Client pressed 'Q', quitting game\n");
-            //break;
-        }
 
         debug("Command: %c\n", command);
 

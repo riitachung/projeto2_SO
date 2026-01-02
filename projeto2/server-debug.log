@@ -17,74 +17,41 @@ Ghost thread 0 começou
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Ghost thread 0: move_ghost
-Ghost thread 0: move_ghost
-Comando do pacman: T
-Ghost thread 0: move_ghost
-Comando do pacman: S
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
-Comando do pacman: T
 Ghost thread 0: move_ghost
-Comando do pacman: S
 Ghost thread 0: move_ghost
-Killing 0 pacman
-
 Ghost thread 0: move_ghost
-O jogo terminou completamente
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
 Pacman thread terminada
-Cliente 2: todas as threads terminadas
-session_thread completamente terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Erro ao escrever no pipe de notificações (server)
