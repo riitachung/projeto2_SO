@@ -425,7 +425,7 @@ void* session_thread (void* arg) {
          if(send_board_state(notif_fd, session) == 1){
             close(req_fd);
             close(notif_fd);
-            free(session);
+            //free(session);
             break;
          }
          

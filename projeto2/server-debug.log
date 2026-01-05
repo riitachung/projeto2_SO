@@ -24,74 +24,173 @@ Ghost Pos = 5 x 2
 
 nível 1.lvl carregado
 Ghost thread 0 começou
-Comando do pacman: W
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
 Ghost thread 0: move_ghost
 Comando do pacman: S
+Ghost thread 0: move_ghost
 Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
-Comando do pacman: W
-Ghost thread 0: move_ghost
-Comando do pacman: S
 Pacman thread terminada
 Erro ao escrever no pipe de notificações (server)
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Cliente 1: todas as threads terminadas
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 11
+TEMPO = 200
+PAC = levels/p1.p
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: Xooooo@X
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XXXXXXXX
+Pacman passo: 0
+Pacman Pos = 2 x 2
+Ghost passo: 1
+Ghost Pos = 5 x 2
+
+nível 1.lvl carregado
+Ghost thread 0 começou
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Pacman thread terminada
+Erro ao escrever no pipe de notificações (server)
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Cliente 1: todas as threads terminadas
+session_thread completamente terminada
+load_level: levels1.lvl
+DIM = 8 x 11
+TEMPO = 200
+PAC = levels/p1.p
+MON file: levels/m1.m
+Line: XXXXXXXX
+Line: Xooooo@X
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XXXXXXXX
+Pacman passo: 0
+Pacman Pos = 2 x 2
+Ghost passo: 1
+Ghost Pos = 5 x 2
+
+nível 1.lvl carregado
+Ghost thread 0 começou
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Ghost thread 0: move_ghost
+Comando do pacman: W
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Ghost thread 0: move_ghost
+Comando do pacman: W
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Ghost thread 0: move_ghost
+Comando do pacman: W
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Ghost thread 0: move_ghost
+Ghost thread 0: move_ghost
+Comando do pacman: T
+Erro ao escrever no pipe de notificações (server)
+Ghost thread 0: move_ghost
+Pacman thread terminada
+Ghost thread 0: game_over detetado -> acaba a ghost thread
+Cliente 1: todas as threads terminadas
+session_thread completamente terminada

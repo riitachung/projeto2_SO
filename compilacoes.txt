@@ -44,17 +44,11 @@ ist1114055@sigma02:
 não pode ser, o número no final tem de ser igual em todos os terminais.
 
 COISAS IMPORTANTES
-- ver se os clientes podem ser introduzidos com ids iguais, se puderem o que fazer?
-- niveis do pacman tambem podem ser lidos na diretoria a exceçao dos movimentos ??
 - fazer levels para entregar (posso fazer Rita)
 - por coisas em funções
 - verificaçoes (mallocs) 
 - last check
 
-
-
-- o que acontece quando no cliente damos ctrl c?
-- por PASSO e POS no servidor
 - pacman automatico
-    - quando se faz o T e o ghost mata o pacman, o jogo so acaba quando ele acaba o T
+    - o T não funciona
     

@@ -3,47 +3,43 @@ Cliente conectado
 receiver_thread:
 Command: W
 Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
 Command: W
 Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
 Command: W
 Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
 Command: W
 Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
 Command: W
 Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
 Command: W
 Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
 Command: W
 Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
-Command: W
-Command: S
+moves_to_wait: 4
+tempo: 200
+tempo * moves_to_wait: 800
+Command: T
