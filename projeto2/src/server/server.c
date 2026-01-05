@@ -256,9 +256,9 @@ void* pacman_thread(void *arg) {
          play = &c;
       }
       // PACMAN AUTOMÁTICO
-      else {
-         play = &pacman->moves[pacman->current_move%pacman->n_moves];
-      }
+      //else {
+         //play = &pacman->moves[pacman->current_move%pacman->n_moves];
+      //}
 
       debug("Comando do pacman: %c\n", play->command);
 
@@ -438,6 +438,7 @@ void* session_thread (void* arg) {
 
          if (session->game_over) {                                     // verifica se o jogo terminou
             debug("O jogo terminou completamente\n");
+            sleep_ms(session->board.tempo);
             break;
          }  
 

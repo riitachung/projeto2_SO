@@ -1,5 +1,5 @@
 # PASSO: número de jogadas entre movimentos
-PASSO 1
+PASSO 0
 # POS: posição inicial do monstro (linha, coluna)
 # Escolhi uma posição válida e livre no teu mapa: (2,2)
 POS 4 4

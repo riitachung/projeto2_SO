@@ -1,51 +1,97 @@
 Host thread iniciada
 começou session thread
+começou session thread
 load_level: levels1.lvl
-DIM = 8 x 4
+DIM = 8 x 11
 TEMPO = 200
 PAC = levels/p1.p
 MON file: levels/m1.m
 Line: XXXXXXXX
-Line: XXXXoo@X
+Line: Xooooo@X
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
+Line: XooooooX
 Line: XooooooX
 Line: XXXXXXXX
-fez o load_level
-mon file: levels/m1.m
-pacman file: levels/p1.p
-Pacman passo: 1
-Pacman Pos = 1 x 2
+Pacman passo: 0
+Pacman Pos = 2 x 2
 Ghost passo: 1
-Ghost Pos = 5 x 1
+Ghost Pos = 5 x 2
 
 nível 1.lvl carregado
 Ghost thread 0 começou
+Comando do pacman: W
 Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: T
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: D
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: T
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: D
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: T
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: D
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: T
+Comando do pacman: S
+Comando do pacman: W
 Ghost thread 0: move_ghost
-Comando do pacman: D
-Killing 0 pacman
-
-DEAD_PACMAN -> QUIT_GAME
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
+Comando do pacman: W
+Ghost thread 0: move_ghost
+Comando do pacman: S
 Pacman thread terminada
-O jogo terminou completamente
-Ghost thread 0: game_over detetado -> acaba a ghost thread
-Cliente 2: todas as threads terminadas
-session_thread completamente terminada
+Erro ao escrever no pipe de notificações (server)

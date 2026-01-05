@@ -1,2 +1,4 @@
-PASSO 1
-POS 1 2
+PASSO 0
+POS 2 2
+A 
+D

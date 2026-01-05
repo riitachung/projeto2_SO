@@ -198,6 +198,7 @@ int read_pacman(board_t* board, int points) {
     // end of the file contains the moves
     pacman->current_move = 0;
     
+    /*
     // command here still holds the previous line
     int move = 0;
     while (read > 0 && move < MAX_MOVES) {
@@ -209,11 +210,15 @@ int read_pacman(board_t* board, int points) {
             command[0] == 'R' ||
             command[0] == 'G' ||  // FIXME: so para testar
             command[0] == 'Q') {  // FIXME: so para testar
+                break;
+                
                 pacman->moves[move].command = command[0];
                 pacman->moves[move].turns = 1;
                 move += 1;
+                
         }
         else if (command[0] == 'T' && command[1] == ' ') { 
+            
             int t = atoi(command+2);
             if (t > 0) {
                 pacman->moves[move].command = command[0];
@@ -221,11 +226,15 @@ int read_pacman(board_t* board, int points) {
                 pacman->moves[move].turns_left = t;
                 move += 1;
             }
+            
+           break;
         }
 
         read = read_line(fd, command);
     }
     pacman->n_moves = move;
+    */
+
 
     if (read == -1) {
         debug("Failed reading line\n");

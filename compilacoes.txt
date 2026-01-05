@@ -1,11 +1,11 @@
 ----- correr servidor ----- 
-./bin/PacmanIST levels 1 /tmp/server_reg
+./bin/PacmanIST levels 2 /tmp/server_reg
 
 ----- compilar e correr correr cliente: -----
 cd client-base-with-Makefile-v3/
 make clean
 make
-./bin/client 2 /tmp/server_reg
+./bin/client 1 /tmp/server_reg
 
 ----- compilação servidor -----
 cd SO-2526-sol-parte1/src
