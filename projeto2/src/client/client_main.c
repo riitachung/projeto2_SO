@@ -145,9 +145,6 @@ int main(int argc, char *argv[]) {
             if (command == 'T') {
                 int moves_to_wait;
                 fscanf(cmd_fp, " %d", &moves_to_wait);                              // lê o número de movimentos a esperar no ficheiro
-                debug("moves_to_wait: %d\n", moves_to_wait);
-                debug("tempo: %d\n", wait_for);
-                debug("tempo * moves_to_wait: %d\n", wait_for * moves_to_wait);
                 sleep_ms(wait_for * moves_to_wait);                                 // espera o número de movimetos
             }
 

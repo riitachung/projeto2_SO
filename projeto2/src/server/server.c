@@ -255,10 +255,6 @@ void* pacman_thread(void *arg) {
          c.turns = 1;
          play = &c;
       }
-      // PACMAN AUTOMÁTICO
-      //else {
-         //play = &pacman->moves[pacman->current_move%pacman->n_moves];
-      //}
 
       debug("Comando do pacman: %c\n", play->command);
 
@@ -425,7 +421,6 @@ void* session_thread (void* arg) {
          if(send_board_state(notif_fd, session) == 1){
             close(req_fd);
             close(notif_fd);
-            //free(session);
             break;
          }
          
@@ -510,8 +505,6 @@ void* session_thread (void* arg) {
       
       // FAZER UNLOAD DO ÚLTIMO NÍVEL
       unload_level(&session->board);
-      //close(session->req_pipe);
-      //close(session->notif_pipe);
       pthread_rwlock_destroy(&session->victory_lock);
       clients[session->client_index].active = 0;                           // se o jogo terminou, cliente deixa de estar ativo
       free(session);
