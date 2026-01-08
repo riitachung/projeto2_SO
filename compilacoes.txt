@@ -44,6 +44,12 @@ ist1114055@sigma02:
 não pode ser, o número no final tem de ser igual em todos os terminais.
 
 COISAS IMPORTANTES
+- TIRAR TO-DOS 
+- TESTES ?
+- ver coisas comentadas no parser
+- apagar top5clientes
+- tirar SO-2526 e clientbase with makefile
+
 - fazer levels para entregar (posso fazer Rita)
 - por coisas em funções
 - verificaçoes (mallocs) 

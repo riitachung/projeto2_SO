@@ -470,7 +470,7 @@ void* session_thread (void* arg) {
       // FAZER UNLOAD DO ÚLTIMO NÍVEL
       unload_level(&session->board);
       //close(session->req_pipe);
-      //close(session->notif_pipe);
+      //close(session->notif_pipe);    // TO-DO
       pthread_rwlock_destroy(&session->victory_lock);
       clients[session->client_index].active = 0;                           // se o jogo terminou, cliente deixa de estar ativo
       free(session);
