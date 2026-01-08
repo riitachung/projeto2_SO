@@ -119,6 +119,7 @@ int main(int argc, char *argv[]) {
             ch = fgetc(cmd_fp);
 
             if (ch == EOF) {
+                debug("EOF do ficheiro, recomeçar desde inicio\n");
                 // Restart at the start of the file
                 rewind(cmd_fp);
                 continue;
@@ -128,7 +129,6 @@ int main(int argc, char *argv[]) {
 
             if (command == '\n' || command == '\r' || command == '\0')
                 continue;
-
             command = toupper(command);
 
             // Wait for tempo, to not overflow pipe with requests
@@ -138,9 +138,9 @@ int main(int argc, char *argv[]) {
 
             // Garantir um delay mínimo mesmo se tempo for 0
             if (wait_for <= 0){
+                sleep_ms(100);
                 continue;
             } 
-
             // se o comando for 'T', esperar o tempo necessário
             if (command == 'T') {
                 int moves_to_wait;

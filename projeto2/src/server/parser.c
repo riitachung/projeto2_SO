@@ -197,44 +197,6 @@ int read_pacman(board_t* board, int points) {
 
     // end of the file contains the moves
     pacman->current_move = 0;
-    
-    /*
-    // command here still holds the previous line
-    int move = 0;
-    while (read > 0 && move < MAX_MOVES) {
-        if (command[0]== '#' || command[0] == '\0') continue;
-        if (command[0] == 'A' ||
-            command[0] == 'D' ||
-            command[0] == 'W' ||
-            command[0] == 'S' ||
-            command[0] == 'R' ||
-            command[0] == 'G' ||  // FIXME: so para testar
-            command[0] == 'Q') {  // FIXME: so para testar
-                break;
-                
-                pacman->moves[move].command = command[0];
-                pacman->moves[move].turns = 1;
-                move += 1;
-                
-        }
-        else if (command[0] == 'T' && command[1] == ' ') { 
-            
-            int t = atoi(command+2);
-            if (t > 0) {
-                pacman->moves[move].command = command[0];
-                pacman->moves[move].turns = t;
-                pacman->moves[move].turns_left = t;
-                move += 1;
-            }
-            
-           break;
-        }
-
-        read = read_line(fd, command);
-    }
-    pacman->n_moves = move;
-    */
-
 
     if (read == -1) {
         debug("Failed reading line\n");
@@ -379,13 +341,6 @@ files_t manage_files(const char *path){
                 snprintf(files.ghost_files[files.ghost_count], MAX_FILENAME, "%s", filename);
                 files.ghost_count++;
             }
-            /*
-            // guarda na struct files.pacman_files os nomes dos ficheiros dos pacmans com o path todo ==> files.level_files[] = ["path/.../p1.p", "path/.../p2.p", ...]
-            else if (strcmp(filename + (len - 2), ".p") == 0){
-                snprintf(files.pacman_files[files.pacman_count], MAX_FILENAME, "%s", filename);
-                files.pacman_count++;
-            } 
-            */
         }
     }
     closedir(directory_path); 
