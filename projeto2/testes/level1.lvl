@@ -1,7 +1,7 @@
 DIM 7 6
-TEMPO 300
+TEMPO 400
 PAC 2.p
-MON m1.m m2.m
+MON m1.m m3.m
 XXXXXXX
 XoooooX
 XoXXXoX

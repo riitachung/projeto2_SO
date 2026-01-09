@@ -1,6 +1,10 @@
 PASSO 1
 POS 4 1
-A
 D
 S
 W
+A
+A
+S
+D
+D

@@ -1,7 +1,9 @@
 PASSO 1
-POS 3 2
+POS 5 3
 D
-S
 D
 W
+A
+D
+A
 A
