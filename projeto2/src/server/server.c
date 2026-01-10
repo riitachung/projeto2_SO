@@ -78,6 +78,7 @@ int sort_clients(const void *a, const void *b) {
 }
 
 /*---------- FUNÇÕES AUXILIARES À SESSION_THREAD ----------*/
+
 int open_client_pipes(session_request_t request, int* req_fd, int* notif_fd){
    char opcode = 1, result = 0;
    *notif_fd = open(request.notif_pipe_path, O_WRONLY);
@@ -338,7 +339,7 @@ void* ghost_thread(void *arg) {
 /*---------- THREAD GESTORA DE SESSÃO -----------*/
 /// @brief thread que gere a sessão de cada cliente
 void* session_thread (void* arg) {
-   char* levels_dir = (char*) arg;                       // recebe a diretoria dos niveis como argumento
+   char* levels_dir = (char*) arg;                       // recebe a diretoria dos níveis como argumento
    debug("começou session thread\n");
 
 /*--------FASE GESTÃO DA SESSÃO ---------*/
@@ -538,7 +539,7 @@ void* host_thread (void* arg) {
       }
 
       // LÊ O FIFO DE REGISTO
-      if(read(server_fd, &opcode, sizeof(char)) != 1) continue;             // se o opcode nao foi recebido recomeça o ciclo
+      if(read(server_fd, &opcode, sizeof(char)) != 1) continue;             // se o opcode não foi recebido recomeça o ciclo
       if(opcode != 1) continue;                                             // se não for pedido de início de sessão recomeça o ciclo
 
       // LÊ OS PATHS DOS PIPES DO CLIENTE
@@ -552,7 +553,7 @@ void* host_thread (void* arg) {
       strcpy(request.req_pipe_path, req_pipe_path);
       strcpy(request.notif_pipe_path, notif_pipe_path);
 
-      sem_wait(&empty_buffer);                                               // espera q existam espacos no buffer, se buffer cheio, bloqueia
+      sem_wait(&empty_buffer);                                               // espera que existam espaços no buffer, se buffer cheio, bloqueia
       pthread_mutex_lock(&buffer_mutex);                                     // evita leituras e escritas incorretas no buffer
 
       buffer[in] = request;                                                  // escreve pedido no buffer
@@ -589,7 +590,7 @@ int main(int argc, char *argv[]) {                          // PacmanIST levels_
    sigaddset(&set, SIGUSR1); 
    pthread_sigmask(SIG_BLOCK, &set, NULL);                  // bloqueia sinal SIGUSR1 nas threads
 
-   pthread_mutex_init(&buffer_mutex, NULL);                 // inicia mutexs e semaforos
+   pthread_mutex_init(&buffer_mutex, NULL);                 // inicia mutex e semaforos
    sem_init(&empty_buffer, 0, MAX_BUFFER_SIZE);
    sem_init(&full_buffer, 0, 0);
 

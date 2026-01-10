@@ -49,7 +49,7 @@ int pacman_connect(char const *req_pipe_path, char const *notif_pipe_path, char 
     write(server_fd, notif_buffer, sizeof(notif_buffer)) != 40) return 1;
 
   close(server_fd);
-  if((notif_fd = open(notif_pipe_path, O_RDONLY)) < 0) return 1;        // debloqueia fifo de notificações do servidor
+  if((notif_fd = open(notif_pipe_path, O_RDONLY)) < 0) return 1;        
 
   /*---------- LÊ RESPOSTA DO SERVER ----------*/  
   if(read(notif_fd, &opcode_notif, sizeof(char)) != 1 || (opcode_notif != 1)) return 1;                         
